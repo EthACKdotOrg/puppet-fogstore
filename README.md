@@ -40,8 +40,9 @@ We will also provide some scripts allowing you to deploy a new OSD (storage) in 
 minutes. This part will be the most important of the whole project, as this will allow
 anyone you want to join your own grid.
 
-### Getting started
-Coming soon ;).
-
 Please check [the website](https://fogstore.org/) for more information.
 
+## Usage
+This module relies on some third-party modules, you have the list above.
+
+Puppet examples will come shortly.
