@@ -40,8 +40,14 @@
 # [*client_jks_password*]
 #       Client JKS truststore password.
 #
+# [*cred_cert*]
+#       Credential certificate file name.
+#
 # [*cred_format*]
 #       Credential container format.
+#
+# [*cred_key*]
+#       Credential private key file name.
 #
 # [*dir_ca*]
 #       Dir CA file name.
@@ -103,7 +109,9 @@ class fogstore(
   $apt_key_src         = "${source}/Release.key",
   $client_ca           = false,
   $client_jks_password = false,
+  $cred_cert           = false,
   $cred_format         = $fogstore::params::cred_format,
+  $cred_key            = false,
   $dir_ca              = false,
   $dir_jks_password    = false,
   $dir_service         = $fogstore::params::dir_service,
@@ -127,6 +135,8 @@ class fogstore(
   if $manage_ssl and (
     !$client_ca or
     !$client_jks_password or
+    !$cred_cert or
+    !$cred_key or
     !$dir_ca or
     !$dir_jks_password or
     !$mrc_ca or
