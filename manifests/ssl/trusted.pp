@@ -25,7 +25,7 @@ class fogstore::ssl::trusted (
     trustcacerts => true,
     notify       => Anchor[$xtreemfs::internal::workflow::configure],
   }
-  
+
   java_ks {"dir_mrc_ca:${ks_base}/dir.jks":
     ensure       => latest,
     certificate  => "${ssl_source_dir}/${mrc_ca}",
@@ -50,7 +50,7 @@ class fogstore::ssl::trusted (
     trustcacerts => true,
     notify       => Anchor[$xtreemfs::internal::workflow::configure],
   }
-  
+
   java_ks {"mrc_dir_ca:${ks_base}/mrc.jks":
     ensure       => latest,
     certificate  => "${ssl_base}/${dir_ca}",
@@ -67,7 +67,7 @@ class fogstore::ssl::trusted (
     trustcacerts => true,
     notify       => Anchor[$xtreemfs::internal::workflow::configure],
   }
-  
+
   java_ks {"osd_dir_ca:${ks_base}/osd.jks":
     ensure       => latest,
     certificate  => "${ssl_source_dir}/${osd_ca}",
