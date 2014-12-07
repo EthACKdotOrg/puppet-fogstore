@@ -10,7 +10,7 @@
 #
 # [*role*]
 #       Node role. Accepted:
-#       client, dir, mrc, osd
+#       client, dir, introducer, mrc, osd
 #
 # [*ssl_source_dir*]
 #       Source directory for SSL certificates.
@@ -128,7 +128,7 @@ class fogstore(
   $trusted_format      = $fogstore::params::trusted_format,
 ) inherits fogstore::params {
 
-  if $role !~ /client|dir|mrc|osd/ {
+  if $role !~ /client|dir|introducer|mrc|osd/ {
     fail "Fogstore: unknown node role: ${role}"
   }
 
@@ -162,7 +162,7 @@ class fogstore(
     $_repository = $add_repository,
   }
 
-  if $role ~ /osd|mrc|dir/ and $manage_ssl {
+  if $role ~ /osd|mrc|dir|introducer/ and $manage_ssl {
     file {$::fogstore::params::trust_location:
       ensure  => directory,
       group   => 'xtreemfs',
@@ -172,16 +172,37 @@ class fogstore(
     }
   }
 
-
-  class {"::fogstore::roles::${role}":
-    add_repo         => $_repository,
-    cred_format      => $cred_format,
-    cred_password    => $cred_password,
-    object_dir       => $object_dir,
-    properties       => $properties,
-    ssl_source_dir   => $ssl_source_dir,
-    trusted_format   => $trusted_format,
-    trusted_password => $trusted_password,
+  if ($role == 'introducer' {
+    class {"::fogstore::roles::mrc":
+      add_repo         => $_repository,
+      cred_format      => $cred_format,
+      cred_password    => $cred_password,
+      object_dir       => $object_dir,
+      properties       => $properties,
+      ssl_source_dir   => $ssl_source_dir,
+      trusted_format   => $trusted_format,
+      trusted_password => $trusted_password,
+    }
+    class {"::fogstore::roles::dir":
+      add_repo         => $_repository,
+      cred_format      => $cred_format,
+      cred_password    => $cred_password,
+      object_dir       => $object_dir,
+      properties       => $properties,
+      ssl_source_dir   => $ssl_source_dir,
+      trusted_format   => $trusted_format,
+      trusted_password => $trusted_password,
+    }
+  } else {
+    class {"::fogstore::roles::${role}":
+      add_repo         => $_repository,
+      cred_format      => $cred_format,
+      cred_password    => $cred_password,
+      object_dir       => $object_dir,
+      properties       => $properties,
+      ssl_source_dir   => $ssl_source_dir,
+      trusted_format   => $trusted_format,
+      trusted_password => $trusted_password,
+    }
   }
-
 }
