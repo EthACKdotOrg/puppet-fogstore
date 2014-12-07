@@ -6,6 +6,9 @@ class fogstore::params {
   # used for ssl.service_creds.container
   $cred_format = 'pkcs12'
 
+  # credential location
+  $cred_location = '/etc/ssl/certs'
+
   # default dir service
   $dir_service = 'localhost'
 
