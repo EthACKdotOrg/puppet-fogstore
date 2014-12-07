@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/x-icon" href="/fogstore-ico.png" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="EthACK.org">
+    <meta name="description" content="Fogstore, the decentralized storage receipt.">
+    <meta name="keywords" content="fogstore, cloud, decentralized, storage, xtreemfs, cryptography, encryptfs">
+
+    <link href="/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+
+    <title>Fogstore — Community decentralized storage at hand.</title>
+  </head>
+  <body>
+    <a name="top"></a>
+    <a id="toTop" href="#top"></a>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img src="/fogstore.png" alt=""></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#purpose"><span class="fa-cubes"></span> Purpose</a></li>
+            <li><a href="#key-features"><span class="fa-cog"></span> Features</a></li>
+            <li><a href="https://github.com/ethackdotorg/puppet-fogstore"><span class="fa-github"></span> On Github</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container" role="main">
+      <div class="jumbotron">
+        <div class="">
+          <h1>Fogstore</h1>
+          <p><i>Community decentralized storage at hand.</i></p>
+        </div>
+      </div>
+
+      <div class="content">
+        <h2><a name="purpose"></a><span class="fa-cubes"></span> Purpose</h2>
+        <div class="row">
+          <div class="col-md-6 alert alert-danger">
+            We all have data. Documents we don't want to lose. Hence we use services like
+            <i>Google Drive</i>, <i>DropBox</i> in order to get a "backup". But we should also know it's not really the
+            best thing, as those services crawl our data. And <b>we cannot be 100% sure there is no flaw in there infrastructure</b>.
+          </div>
+          <div class="col-md-6 alert alert-success">
+            <b>With fogstore</b>, you're able to build your own backup/storage infrastructure, using your own storage or, if you trust your friends,
+            a grid built on multiple locations.
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 alert alert-danger">
+            We are currently using more and more storage. If we want to save movies we bought, <b>we can quickly come to terabytes of data</b>.
+            We can of course find providers with such amount of data. But <b>they are expensive</b>. And we still can't be sure they are as safe as they say.
+          </div>
+          <div class="col-md-6 alert alert-success">
+            <b>Fogstore provides a convenient way</b> for building such an infrastructure. Gather with friends, create your own community, and share the storage.
+            You can define who can write or not, who can access read-only. At no cost, except the very material (hard drive, low-voltage computers).
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 alert alert-danger">
+            As said, we can't ensure the security is strong when we use centralized, proprietary solutions. We pay for something we can't control.
+          </div>
+          <div class="col-md-6 alert alert-success">
+            Fogstore allows you to build, consolidate and control the storage infrastructure. Using strong x509 authentication, you can ensure
+            nobody can access the content if you don't want to.
+          </div>
+        </div>
+        <p>
+        The whole infrastructure is <b>redundant and scalable</b>. Should you need some more storage? Just add a new node with some storage attached.
+        Replication is working out of the box. And you control the accesses for any part of the grid.
+        </p>
+      </div>
+
+      <div class="content">
+        <h2><a name="key-features"></a><span class="fa-cog"></span> Key features</h2>
+        <div class="row">
+          <div class="col-md-6">
+            <h4><span class="fa fa-lock"></span>Security</h4>
+            <p>
+            Providing an easy way to build the grid allows people to put their data whever they want. Using a secured, distributed filesystem
+            ensures the user can manage access rights in a convenient way.<br>
+            Sure, it uses SSL/TLS, with strong x509 certificates, and this can be cumbersome. But we want to make that easy. Scripts are provided as
+            well as documentation.
+            </p>
+            <p><b>Don't fear security for its complexity. Love it for its simplicity!</b></p>
+          </div>
+          <div class="col-md-6">
+            <h4><span class="fa fa-share-alt"></span>Decentralization</h4>
+            <p>
+            Using most modern applications and system features, we are able to decentralize storage service. We use
+            <a href="http://xtreemfs.org/">XtreemFS</a>. This filesystem allows many things, among them:
+            </p>
+            <ul class="list-unstyled listing">
+              <li><span class="fa fa-copy"></span>Native replication</li>
+              <li><span class="fa fa-certificate"></span>Strong x509 authentication and SSL connections</li>
+              <li><span class="fa fa-share-alt"></span>Full decentralization</li>
+              <li><span class="fa fa-code-fork"></span>Multiple entry points</li>
+              <li><span class="fa fa-arrows-alt"></span>High scalability</li>
+            </ul>
+            <p><b>Your data are safe. As the connections.</b></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <footer>
+    <div class="container">
+      <div class="copyr">
+        Fogstore 2014 <a href="https://creativecommons.org/licenses/by-sa/4.0/">cc-by-sa</a> — created by <a href="https://ethack.org/">EthACK.org</a>, the Swiss Privacy Basecamp.
+        A big thanks to <a href="http://remitaines.com/">MisteraiR</a> for the design and logo!
+      </div>
+    </div>
+    </footer>
+    <script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      $(window).scroll(function() {
+        wintop = $(window).scrollTop();
+        if (wintop > 60) {
+          $('#toTop').show();
+        } else {
+          $('#toTop').hide();
+        }
+      });
+    </script>
+  </body>
+</html>
