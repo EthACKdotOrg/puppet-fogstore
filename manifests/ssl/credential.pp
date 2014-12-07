@@ -1,13 +1,45 @@
+# == Definition: fogstore::ssl::credential
+#
+# manage XtreemFS credential PKCS12
+#
+# == Parameters
+# === Mandatory
+#
+# [*client_ca*]
+#       Client CA file.
+#
+# [*cred_cert*]
+#       Credential Certificate file.
+#
+# [*cred_key*]
+#       Credential Private key file.
+#
+# [*dir_ca*]
+#       Dir CA file.
+#
+# [*mrc_ca*]
+#       MRC CA file.
+#
+# [*osd_ca*]
+#       OSD CA file.
+#
+# [*pkcs_password*]
+#       Password for generated PKCS12 file.
+#
+# === Optional
+#
+# [*destination_dir*]
+#       Destination directory for generated PKCS12 file.
 define fogstore::ssl::credential(
   $client_ca,
   $cred_cert,
   $cred_key,
-  $destination_dir = '/etc/ssl/certs',
   $dir_ca,
   $mrc_ca,
   $osd_ca,
   $pkcs_password,
-) {
+  $destination_dir = $fogstore::params::cred_location,
+) inherits fogstore::params {
   file {"/etc/ssl/certs/xtreemfs-credentials-${name}.pem":
     ensure => file,
     owner  => 'root',
