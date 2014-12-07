@@ -34,24 +34,48 @@
 #       In case you want to add your own repository, provide
 #       its APT key source
 #
+# [*client_ca*]
+#       Client CA file name.
+#
+# [*client_jks_password*]
+#       Client JKS truststore password.
+#
 # [*cred_format*]
 #       Credential container format.
 #
+# [*dir_ca*]
+#       Dir CA file name.
+#
+# [*dir_jks_password*]
+#       Dir JKS truststore password.
+#
 # [*dir_service*]
-#       Directory service address
+#       Directory service address.
 #
 # [*manage_ssl*]
 #       Should fogstore manage your SSL certificate?
 #       If so, it will create the necessary credential and
 #       trusted containers.
 #
-# [*properties*]
-#       Xtreemfs configuration hash as listed in documentation:
-#       http://xtreemfs.org/xtfs-guide-1.5/index.html#tth_sEc3.2.6
+# [*mrc_ca*]
+#       MRC CA file name.
+#
+# [*mrc_jks_password*]
+#       MRC JKS truststore password.
 #
 # [*object_dir*]
 #       Xtreemfs object destination. Should be some RAID[156] volume
 #       for better security.
+#
+# [*osd_ca*]
+#       OSD CA file name.
+#
+# [*osd_jks_password*]
+#       OSD JKS truststore password.
+#
+# [*properties*]
+#       Xtreemfs configuration hash as listed in documentation:
+#       http://xtreemfs.org/xtfs-guide-1.5/index.html#tth_sEc3.2.6
 #
 # [*release*]
 #       APT repository related "release" field
@@ -74,22 +98,43 @@ class fogstore(
   $role,
   $ssl_source_dir,
   $trusted_password,
-  $add_repo       = true,
-  $apt_key        = $fogstore::params::apt_key,
-  $apt_key_src    = "${source}/Release.key",
-  $cred_format    = $fogstore::params::cred_format,
-  $dir_service    = $fogstore::params::dir_service,
-  $manage_ssl     = true,
-  $properties     = {},
-  $object_dir     = undef,
-  $release        = '',
-  $repos          = './',
-  $pkg_source     = false,
-  $trusted_format = $fogstore::params::trusted_format,
+  $add_repo            = true,
+  $apt_key             = $fogstore::params::apt_key,
+  $apt_key_src         = "${source}/Release.key",
+  $client_ca           = false,
+  $client_jks_password = false,
+  $cred_format         = $fogstore::params::cred_format,
+  $dir_ca              = false,
+  $dir_jks_password    = false,
+  $dir_service         = $fogstore::params::dir_service,
+  $manage_ssl          = true,
+  $mrc_ca              = false,
+  $mrc_jks_password    = false,
+  $object_dir          = undef,
+  $osd_ca              = false,
+  $osd_jks_password    = false,
+  $properties          = {},
+  $release             = '',
+  $repos               = './',
+  $pkg_source          = false,
+  $trusted_format      = $fogstore::params::trusted_format,
 ) inherits fogstore::params {
 
   if $role !~ /client|dir|mrc|osd/ {
     fail "Fogstore: unknown node role: ${role}"
+  }
+
+  if $manage_ssl and (
+    !$client_ca or
+    !$client_jks_password or
+    !$dir_ca or
+    !$dir_jks_password or
+    !$mrc_ca or
+    !$mrc_jks_password or
+    !$osd_ca or
+    !$osd_jks_password
+  ) {
+    fail 'Fogstore: we need all CA and JKS password if $manage_ssl is TRUE'
   }
 
   if $pkg_source {
