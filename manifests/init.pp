@@ -43,11 +43,21 @@
 # [*cred_cert*]
 #       Credential certificate file name.
 #
+# [*cred_certs*]
+#       Credential certificate file names as a hash.
+#       Mostly used for an Introducer. Hash format:
+#       { role => filename}
+#
 # [*cred_format*]
 #       Credential container format.
 #
 # [*cred_key*]
 #       Credential private key file name.
+#
+# [*cred_keys*]
+#       Credential private key file names as a hash.
+#       Mostly used for an Introducer. Hash format:
+#       { role => filename}
 #
 # [*dir_ca*]
 #       Dir CA file name.
@@ -110,8 +120,10 @@ class fogstore(
   $client_ca           = false,
   $client_jks_password = false,
   $cred_cert           = false,
+  $cred_certs          = {},
   $cred_format         = $fogstore::params::cred_format,
   $cred_key            = false,
+  $cred_keys           = {},
   $dir_ca              = false,
   $dir_jks_password    = false,
   $dir_service         = $fogstore::params::dir_service,
@@ -135,8 +147,8 @@ class fogstore(
   if $manage_ssl and (
     !$client_ca or
     !$client_jks_password or
-    !$cred_cert or
-    !$cred_key or
+    (!$cred_cert and size($cred_certs) == 0) or
+    (!$cred_key and size($cred_keys) == 0) or
     !$dir_ca or
     !$dir_jks_password or
     !$mrc_ca or
