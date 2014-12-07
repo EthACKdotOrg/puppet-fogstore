@@ -1,15 +1,50 @@
+# == Class: fogstore::ssl::trusted
+#
+# generate trust stores in JKS format.
+#
+# == Parameters
+#
+# [*client_ca*]
+#       Client CA file name.
+#
+# [*client_jks_password*]
+#       Client JKS truststore password.
+#
+# [*dir_ca*]
+#       Dir CA file name.
+#
+# [*dir_jks_password*]
+#       Dir JKS truststore password.
+#
+# [*mrc_ca*]
+#       MRC CA file name.
+#
+# [*mrc_jks_password*]
+#       MRC JKS truststore password.
+#
+# [*osd_ca*]
+#       OSD CA file name.
+#
+# [*osd_jks_password*]
+#       OSD JKS truststore password.
+#
+# [*ssl_source_dir*]
+#       Source directory for SSL certificates.
+#       Might be either on the filesystel (file:///…)
+#       or a puppet resource (puppet:///modules/…)
 #
 class fogstore::ssl::trusted (
-  $client_ca,
-  $client_jks_password,
-  $dir_ca,
-  $dir_jks_password,
-  $mrc_ca,
-  $mrc_jks_password,
-  $osd_ca,
-  $osd_jks_password,
-  $ssl_source_dir,
-) inherits fogstore::params {
+  $client_ca           = $fogstore::client_ca,
+  $client_jks_password = $fogstore::client_jks_password,
+  $dir_ca              = $fogstore::dir_ca,
+  $dir_jks_password    = $fogstore::dir_jks_password,
+  $mrc_ca              = $fogstore::mrc_ca,
+  $mrc_jks_password    = $fogstore::mrc_jks_password,
+  $osd_ca              = $fogstore::osd_ca,
+  $osd_jks_password    = $fogstore::osd_jks_password,
+  $ssl_source_dir      = $fogstore::ssl_source_dir,
+) {
+  include fogstore::parms
 
   Java_ks {
     require      => File[$::fogstore::params::trust_location],
