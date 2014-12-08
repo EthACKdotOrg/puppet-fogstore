@@ -1,1 +1,3 @@
 *.swp
+spec/fixtures
+Gemfile.lock
