@@ -7,21 +7,8 @@ group :test do
   gem "beaker",                 :require => false
   gem "beaker-rspec",           :require => false
   gem "metadata-json-lint",     :require => false
-
-  if RUBY_VERSION >= "1.9.0"
-    gem 'coveralls',            :require => false
-    gem 'simplecov',            :require => false
-  end
-  if facterversion = ENV['FACTER_GEM_VERSION']
-    gem 'facter', facterversion, :require => false
-  else
-    gem 'facter',               :require => false
-  end
-  if puppetversion = ENV['PUPPET_GEM_VERSION']
-    gem 'puppet', puppetversion, :require => false
-  else
-    gem 'puppet',               :require => false
-  end
+  gem 'puppet-lint',            :require => false
+  gem 'puppet_facts',           :require => false, :git => 'https://github.com/camptocamp/puppet_facts.git'
 end
 
 group :development do
@@ -39,4 +26,17 @@ group :development do
     end
   end
 end
+
+if facterversion = ENV['FACTER_GEM_VERSION']
+    gem 'facter', facterversion, :require => false
+else
+    gem 'facter', :require => false
+end
+
+if puppetversion = ENV['PUPPET_GEM_VERSION']
+    gem 'puppet', puppetversion, :require => false
+else
+    gem 'puppet', :require => false
+end
+
 # vim:ft=ruby
