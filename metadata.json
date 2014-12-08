@@ -1,0 +1,23 @@
+{
+  "name": "puppet-fogstore",
+  "version": "0.1.0",
+  "author": "EthACK",
+  "license": "GPLv3",
+  "source": "https://github.com/ethackdotorg/puppet-fogstore.git",
+  "project_page": "https://fogstore.org/",
+  "issues_url": "https://github.com/ethackdotorg/puppet-fogstore/issues",
+  "summary": "Wrapper for puppet-xtreemfs with full SSL support",
+  "tags": ["filesystem", "grid", "xtreemfs"],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": ["8.0"]
+    }
+  ],
+  "dependencies": [
+    { "name": "puppetlabs/stdlib" } ,
+    { "name": "wavesoftware/xtreemfs" },
+    { "name": "camptocamp/openssl" },
+    { "name": "puppetlabs/java_ks" }
+  ]
+}
