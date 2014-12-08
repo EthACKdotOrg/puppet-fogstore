@@ -31,6 +31,7 @@ This repository provides a puppet module. Basically, it's a wrapper for the foll
 * [puppet-xtreemfs](https://github.com/wavesoftware/puppet-xtreemfs)
 * [puppet-openssl](https://github.com/camptocamp/puppet-openssl)
 * [puppetlabs-java_ks](https://github.com/puppetlabs/puppetlabs-java_ks)
+* [puppetlabs-apt](https://github.com/puppetlabs/puppetlabs-apt)
 
 Fogstore just provides helpers in order to access those modules and ensure you can
 use them in a convenient way. You might as well take those modules and create your
