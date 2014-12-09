@@ -16,5 +16,5 @@ class fogstore::params {
   $trusted_format = 'jks'
 
   # where we put the credentials and trust stores
-  $trusted_location = '/etc/xos/xtreemfs/truststore'
+  $trust_location = '/etc/xos/xtreemfs/truststore'
 }

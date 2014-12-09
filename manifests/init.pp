@@ -171,10 +171,10 @@ class fogstore(
       repos       => $repos,
     }
   } else {
-    $_repository = $add_repository,
+    $_repository = $add_repo
   }
 
-  if $role ~ /osd|mrc|dir|introducer/ and $manage_ssl {
+  if $role =~ /(osd|mrc|dir|introducer)/ and $manage_ssl {
     file {$::fogstore::params::trust_location:
       ensure  => directory,
       group   => 'xtreemfs',
@@ -184,8 +184,8 @@ class fogstore(
     }
   }
 
-  if ($role == 'introducer' {
-    class {"::fogstore::roles::mrc":
+  if $role == 'introducer' {
+    class {'::fogstore::roles::mrc':
       add_repo         => $_repository,
       cred_format      => $cred_format,
       cred_password    => $cred_password,
@@ -195,7 +195,7 @@ class fogstore(
       trusted_format   => $trusted_format,
       trusted_password => $trusted_password,
     }
-    class {"::fogstore::roles::dir":
+    class {'::fogstore::roles::dir':
       add_repo         => $_repository,
       cred_format      => $cred_format,
       cred_password    => $cred_password,
