@@ -7,9 +7,6 @@
 # [*client_ca*]
 #       Client CA file name.
 #
-# [*client_jks_password*]
-#       Client JKS truststore password.
-#
 # [*dir_ca*]
 #       Dir CA file name.
 #
@@ -35,7 +32,6 @@
 #
 class fogstore::ssl::trusted (
   $client_ca           = $fogstore::client_ca,
-  $client_jks_password = $fogstore::client_jks_password,
   $dir_ca              = $fogstore::dir_ca,
   $dir_jks_password    = $fogstore::dir_jks_password,
   $mrc_ca              = $fogstore::mrc_ca,
