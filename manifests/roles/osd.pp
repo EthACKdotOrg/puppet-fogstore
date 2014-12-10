@@ -30,6 +30,7 @@ class fogstore::roles::osd(
   $dir_host        = $fogstore::params::dir_host,
   $dir_port        = $fogstore::params::dir_port,
   $dir_protocol    = $fogstore::params::dir_protocol,
+  $manage_jks      = true,
   $object_dir      = undef,
   $properties      = {},
   $ssl_source_dir  = $fogstore::ssl_source_dir,
@@ -53,6 +54,10 @@ class fogstore::roles::osd(
       $trusted_format,
     'ssl.trusted_certs.pw' =>
       $trusted_password,
+  }
+
+  if ($manage_jks) {
+    include ::fogstore::ssl::trusted
   }
 
   class {'::xtreemfs::role::storage':
