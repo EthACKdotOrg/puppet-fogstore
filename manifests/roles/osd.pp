@@ -25,11 +25,14 @@ class fogstore::roles::osd(
   $add_repo       = $fogstore::add_repo,
   $cred_format    = $fogstore::cred_format,
   $credential     = undef,
+  $cred_password  = $fogstore::cred_password,
+  $dir_service    = $fogstore::params::dir_service,
   $object_dir     = undef,
   $properties     = {},
   $ssl_source_dir = $fogstore::ssl_source_dir,
-  $trusted_format = $fogstore::trusted_format,
   $trusted        = undef,
+  $trusted_format = $fogstore::trusted_format,
+  $trusted_password = $fogstore::osd_jks_password,
 ) inherits fogstore::params {
 
   # Set SSL configuration by default
@@ -41,13 +44,13 @@ class fogstore::roles::osd(
     'ssl.service_creds.container' =>
       $cred_format,
     'ssl.service_creds.pw' =>
-      hiera('xtreemfs::service_cred::pwd'),
+      $cred_password,
     'ssl.trusted_certs' =>
       "${fogstore::params::trust_location}/${trusted}",
     'ssl.trusted_certs.container' =>
       $trusted_format,
     'ssl.trusted_certs.pw' =>
-      hiera('xtreemfs::trusted_cred::pwd'),
+      $trusted_password,
   }
 
   class {'::xtreemfs::role::storage':
