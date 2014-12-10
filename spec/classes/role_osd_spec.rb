@@ -41,7 +41,7 @@ describe 'fogstore::roles::osd' do
 
   describe "should push credential file" do
     it {
-      should contain_file('/etc/xos/xtreemfs/truststore/osd.jks')
+      should contain_file('/etc/ssl/certs/osd.p12')
       .with('source' => './osd.p12')
     }
   end

@@ -64,12 +64,12 @@ class fogstore::roles::osd(
     properties   => merge($local_properties, $properties),
   }
 
-  file {"${trust_location}/${credential}":
+  file {"${cred_location}/${credential}":
     ensure => file,
     group  => 'xtreemfs',
     mode   => '0640',
     notify => Anchor[$::xtreemfs::internal::workflow::configure],
     owner  => 'root',
-    source => "{$ssl_source_dir}/${credential}",
+    source => "${ssl_source_dir}/${credential}",
   }
 }
