@@ -22,13 +22,13 @@
 #
 # NOTE: $properties might override the $local_properties!
 class fogstore::roles::osd(
-  $ssl_source_dir,
-  $add_repo       = undef,
-  $cred_format    = $fogstore::params::cred_format,
+  $add_repo       = $fogstore::add_repo,
+  $cred_format    = $fogstore::cred_format,
   $credential     = undef,
   $object_dir     = undef,
   $properties     = {},
-  $trusted_format = $fogstore::params::trusted_format,
+  $ssl_source_dir = $fogstore::ssl_source_dir,
+  $trusted_format = $fogstore::trusted_format,
   $trusted        = undef,
 ) inherits fogstore::params {
 
