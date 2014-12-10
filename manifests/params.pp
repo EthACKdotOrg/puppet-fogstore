@@ -10,7 +10,9 @@ class fogstore::params {
   $cred_location = '/etc/ssl/certs'
 
   # default dir service
-  $dir_service = 'localhost'
+  $dir_host     = 'localhost'
+  $dir_port     = undef
+  $dir_protocol = undef
 
   # used for ssl.trusted_certs.container
   $trusted_format = 'jks'
