@@ -32,6 +32,16 @@ RSpec.configure do |c|
   end
 end
 
+@os_facts = {
+  'Debian' => {
+    :lsbdistid              => 'Debian',
+    :lsbdistcodename        => 'jessie',
+    :operatingsystem        => 'Debian',
+    :operatingsystemrelease => '8.0',
+    :osfamily               => 'Debian',
+  }
+}
+
 require 'pathname'
 dir = Pathname.new(__FILE__).parent
 Puppet[:modulepath] = File.join(dir, 'fixtures', 'modules')
