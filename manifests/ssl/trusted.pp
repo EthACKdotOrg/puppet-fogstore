@@ -92,7 +92,7 @@ class fogstore::ssl::trusted (
 
   java_ks {"osd_dir_ca:${ks_base}/osd.jks":
     ensure      => latest,
-    certificate => "${ssl_source_dir}/${osd_ca}",
+    certificate => "${ssl_source_dir}/${dir_ca}",
     password    => $osd_jks_password,
   }
 }
