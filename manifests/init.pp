@@ -37,9 +37,6 @@
 # [*client_ca*]
 #       Client CA file name.
 #
-# [*client_jks_password*]
-#       Client JKS truststore password.
-#
 # [*cred_cert*]
 #       Credential certificate file name.
 #
@@ -117,7 +114,6 @@ class fogstore(
   $apt_key             = $fogstore::params::apt_key,
   $apt_key_src         = "${pkg_source}/Release.key",
   $client_ca           = false,
-  $client_jks_password = false,
   $cred_cert           = false,
   $cred_certs          = {},
   $cred_format         = $fogstore::params::cred_format,
@@ -143,23 +139,64 @@ class fogstore(
     fail "Fogstore: unknown node role: ${role}"
   }
 
-  # TODO: better check
-  # if role == OSD, only require osd_jks_password
-  # and so on
+  if $manage_ssl {
+    case $role {
+      'client': {
+        # client needs dir, mrc, osd in its p12
+        if !$dir_ca or !$mrc_ca or !$osd_ca {
+          fail 'Needs dir, mrc and osd CAs for client'
+        }
+      }
+      'dir': {
+        # dir needs client, mrc, osd
+        if !$client_ca or !$mrc_ca or !$osd_ca {
+          fail 'Needs client, mrc and osd CAs for dir'
+        }
+        if !$dir_jks_password {
+          fail 'Needs dir_jks_password for dir'
+        }
+        $trusted_password = $dir_jks_password
+      }
+      'introducer': {
+        # dir part needs client, mrc, osd
+        if !$client_ca or !$mrc_ca or !$osd_ca {
+          fail 'Needs client, mrc and osd CAs for dir (introducer)'
+        }
+        if !$dir_jks_password {
+          fail 'Need dir_jks_password for dir (introducer)'
+        }
 
-  if $manage_ssl and (
-    !$client_ca or
-    !$client_jks_password or
-    (!$cred_cert and size($cred_certs) == 0) or
-    (!$cred_key and size($cred_keys) == 0) or
-    !$dir_ca or
-    !$dir_jks_password or
-    !$mrc_ca or
-    !$mrc_jks_password or
-    !$osd_ca or
-    !$osd_jks_password
-  ) {
-    fail 'Fogstore: we need all CA and JKS password if $manage_ssl is TRUE'
+        # mrc part needs client, dir
+        if !$client_ca or !$dir_ca {
+          fail 'Needs client and dir CAs for mrc (introducer)'
+        }
+        if !$mrc_jks_password {
+          fail 'Need mrc_jks_password for mrc (introducer)'
+        }
+
+      }
+      'mrc': {
+        # mrc needs client, dir
+        if !$client_ca or !$dir_ca {
+          fail 'Needs client and dir CAs for mrc'
+        }
+        if !$mrc_jks_password {
+          fail 'Need mrc_jks_password for mrc'
+        }
+        $trusted_password = $mrc_jks_password
+      }
+      'osd': {
+        # osd needs client, dir
+        if !$client_ca or !$dir_ca {
+          fail 'Needs client and dir CAs for osd'
+        }
+        if !$osd_jks_password {
+          fail 'Need osd_jks_password for osd'
+        }
+        $trusted_password = $osd_jks_password
+      }
+      default : { fail "Unknown role: ${role}" }
+    }
   }
 
   if $pkg_source {
@@ -217,7 +254,7 @@ class fogstore(
       properties       => $properties,
       ssl_source_dir   => $ssl_source_dir,
       trusted_format   => $trusted_format,
-      trusted_password => $trusted_password, # TODO
+      trusted_password => $trusted_password,
     }
   }
 }
