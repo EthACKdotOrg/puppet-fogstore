@@ -1,6 +1,7 @@
 ---
 language: ruby
 bundler_args: --without system_tests
+cache: bundler
 script: ["bundle exec rake validate", "bundle exec rake lint", "bundle exec fakeroot rake spec SPEC_OPTS='--format documentation'"]
 before_install: rm -f Gemfile.lock
 matrix:
