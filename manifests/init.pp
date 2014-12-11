@@ -142,6 +142,9 @@ class fogstore(
   }
 
   if $manage_ssl {
+    if (!$cred_cert or $cred_cert == '') and $cred_certs == {} {
+      fail 'Need credential certificate'
+    }
     case $role {
       'client': {
         # client needs dir, mrc, osd in its p12
@@ -158,6 +161,7 @@ class fogstore(
           fail 'Needs dir_jks_password for dir'
         }
         $trusted_password = $dir_jks_password
+        include ::fogstore::ssl::trusted
       }
       'introducer': {
         # dir part needs client, mrc, osd
@@ -175,6 +179,7 @@ class fogstore(
         if !$mrc_jks_password {
           fail 'Need mrc_jks_password for mrc (introducer)'
         }
+        include ::fogstore::ssl::trusted
 
       }
       'mrc': {
@@ -186,6 +191,7 @@ class fogstore(
           fail 'Need mrc_jks_password for mrc'
         }
         $trusted_password = $mrc_jks_password
+        include ::fogstore::ssl::trusted
       }
       'osd': {
         # osd needs client, dir
