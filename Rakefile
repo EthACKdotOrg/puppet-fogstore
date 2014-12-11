@@ -3,7 +3,7 @@ require 'puppet-lint/tasks/puppet-lint'
 
 PuppetLint.configuration.fail_on_warnings
 PuppetLint.configuration.send('disable_80chars')
-PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp"]
+PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
 desc "Lint metadata.json file"
 task :metadata do
   sh "metadata-json-lint metadata.json"
