@@ -113,10 +113,9 @@ class fogstore(
   $cred_password,
   $role,
   $ssl_source_dir,
-  $trusted_password,
   $add_repo            = true,
   $apt_key             = $fogstore::params::apt_key,
-  $apt_key_src         = "${source}/Release.key",
+  $apt_key_src         = "${pkg_source}/Release.key",
   $client_ca           = false,
   $client_jks_password = false,
   $cred_cert           = false,
@@ -143,6 +142,10 @@ class fogstore(
   if $role !~ /client|dir|introducer|mrc|osd/ {
     fail "Fogstore: unknown node role: ${role}"
   }
+
+  # TODO: better check
+  # if role == OSD, only require osd_jks_password
+  # and so on
 
   if $manage_ssl and (
     !$client_ca or
@@ -193,7 +196,7 @@ class fogstore(
       properties       => $properties,
       ssl_source_dir   => $ssl_source_dir,
       trusted_format   => $trusted_format,
-      trusted_password => $trusted_password,
+      trusted_password => $mrc_jks_password,
     }
     class {'::fogstore::roles::dir':
       add_repo         => $_repository,
@@ -203,7 +206,7 @@ class fogstore(
       properties       => $properties,
       ssl_source_dir   => $ssl_source_dir,
       trusted_format   => $trusted_format,
-      trusted_password => $trusted_password,
+      trusted_password => $dir_jks_password,
     }
   } else {
     class {"::fogstore::roles::${role}":
@@ -214,7 +217,7 @@ class fogstore(
       properties       => $properties,
       ssl_source_dir   => $ssl_source_dir,
       trusted_format   => $trusted_format,
-      trusted_password => $trusted_password,
+      trusted_password => $trusted_password, # TODO
     }
   }
 }
