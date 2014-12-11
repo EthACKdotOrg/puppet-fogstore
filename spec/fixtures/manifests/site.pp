@@ -9,7 +9,7 @@ node osd {
     cred_cert        => 'credential.pem',
     cred_key         => 'credential.key',
     cred_password    => 'credential-password',
-    dir_ca           => 'dir-ca',
+    dir_ca           => 'dir-ca.pem',
     mrc_ca           => 'mrc-ca.pem',
     osd_ca           => 'osd-ca.pem',
     osd_jks_password => 'osd-jks',
