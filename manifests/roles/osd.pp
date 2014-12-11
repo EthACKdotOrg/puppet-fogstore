@@ -69,7 +69,7 @@ class fogstore::roles::osd(
     properties   => merge($local_properties, $properties),
   }
 
-  file {"${cred_location}/${credential}":
+  file {"${fogstore::params::cred_location}/${credential}":
     ensure => file,
     group  => 'xtreemfs',
     mode   => '0640',
