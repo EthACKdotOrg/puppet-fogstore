@@ -41,25 +41,57 @@ define fogstore::ssl::credential(
   $dir_ca          = $fogstore::dir_ca,
   $mrc_ca          = $fogstore::mrc_ca,
   $osd_ca          = $fogstore::osd_ca,
+  $role            = $fogstore::role,
   $ssl_source_dir  = $fogstore::ssl_source_dir,
-) inherits fogstore::params {
+) {
+
+  case $role {
+    client: {
+      $source = [
+        "${ssl_source_dir}/${cred_cert}",
+        "${ssl_source_dir}/${dir_ca}",
+        "${ssl_source_dir}/${mrc_ca}",
+        "${ssl_source_dir}/${osd_ca}",
+      ]
+    }
+    dir: {
+      $source = [
+        "${ssl_source_dir}/${cred_cert}",
+        "${ssl_source_dir}/${client_ca}",
+        "${ssl_source_dir}/${mrc_ca}",
+        "${ssl_source_dir}/${osd_ca}",
+      ]
+    }
+    mrc: {
+      $source = [
+        "${ssl_source_dir}/${cred_cert}",
+        "${ssl_source_dir}/${client_ca}",
+        "${ssl_source_dir}/${dir_ca}",
+        "${ssl_source_dir}/${osd_ca}",
+      ]
+    }
+    osd: {
+      $source = [
+        "${ssl_source_dir}/${cred_cert}",
+        "${ssl_source_dir}/${client_ca}",
+        "${ssl_source_dir}/${dir_ca}",
+        "${ssl_source_dir}/${mrc_ca}",
+      ]
+    }
+    default: { fail "Unknown role ${role}"}
+  }
+
   file {"/etc/ssl/certs/xtreemfs-credentials-${name}.pem":
     ensure => file,
     owner  => 'root',
     group  => 'root',
-    mode   => '0644'
-    source => [
-      "${ssl_source_dir}/${cred_cert}",
-      "${ssl_source_dir}/${client_ca}",
-      "${ssl_source_dir}/${dir_ca}",
-      "${ssl_source_dir}/${mrc_ca}",
-      "${ssl_source_dir}/${osd_ca}",
-      ],
+    mode   => '0644',
+    source => $source,
   }->
   ::openssl::export::pkcs12 {"xtreemfs-credentials-${name}":
     ensure   => present,
     basedir  => $destination_dir,
-    cert     => '/etc/ssl/certs/xtreemfs-credentials.pem',
+    cert     => "/etc/ssl/certs/xtreemfs-credentials-${name}.pem",
     pkey     => "${ssl_source_dir}/${cred_key}",
     out_pass => $cred_password,
   }
