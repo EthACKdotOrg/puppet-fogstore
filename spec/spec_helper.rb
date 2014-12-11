@@ -1,8 +1,4 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
-require 'puppet_facts'
-include PuppetFacts
-
-ENV['UNIT_TEST_PLATFORMS'] = 'debian-8-x86_64'
 
 RSpec.configure do |c|
   c.include PuppetlabsSpec::Files
