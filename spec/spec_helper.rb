@@ -35,6 +35,7 @@ end
     :operatingsystem        => 'Debian',
     :operatingsystemrelease => '8.0',
     :osfamily               => 'Debian',
+    :path                   => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 }
 
