@@ -38,6 +38,7 @@ class fogstore::ssl::trusted (
   $mrc_jks_password    = $fogstore::mrc_jks_password,
   $osd_ca              = $fogstore::osd_ca,
   $osd_jks_password    = $fogstore::osd_jks_password,
+  $role                = $fogstore::role,
   $ssl_source_dir      = $fogstore::ssl_source_dir,
 ) {
   include ::fogstore::params
@@ -51,48 +52,91 @@ class fogstore::ssl::trusted (
 
   $ks_base = $fogstore::params::trust_location
 
-  java_ks {'dir_client_ca':
-    ensure      => latest,
-    certificate => "${ssl_source_dir}/${client_ca}",
-    target      => "${ks_base}/dir.jks",
-    password    => $dir_jks_password,
-  }
+  case $role {
 
-  java_ks {"dir_mrc_ca:${ks_base}/dir.jks":
-    ensure      => latest,
-    certificate => "${ssl_source_dir}/${mrc_ca}",
-    password    => $dir_jks_password,
-  }
+    dir: {
+      java_ks {'dir_client_ca':
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${client_ca}",
+        target      => "${ks_base}/dir.jks",
+        password    => $dir_jks_password,
+      }
 
-  java_ks {"dir_osd_ca:${ks_base}/dir.jks":
-    ensure      => latest,
-    certificate => "${ssl_source_dir}/${osd_ca}",
-    password    => $dir_jks_password,
-  }
+      java_ks {"dir_mrc_ca:${ks_base}/dir.jks":
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${mrc_ca}",
+        password    => $dir_jks_password,
+      }
 
-  java_ks {'mrc_client_ca':
-    ensure      => latest,
-    certificate => "${ssl_source_dir}/${client_ca}",
-    target      => "${ks_base}/mrc.jks",
-    password    => $mrc_jks_password,
-  }
+      java_ks {"dir_osd_ca:${ks_base}/dir.jks":
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${osd_ca}",
+        password    => $dir_jks_password,
+      }
+    }
 
-  java_ks {"mrc_dir_ca:${ks_base}/mrc.jks":
-    ensure      => latest,
-    certificate => "${ssl_source_dir}/${dir_ca}",
-    password    => $mrc_jks_password,
-  }
+    introducer: {
+      java_ks {'dir_client_ca':
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${client_ca}",
+        target      => "${ks_base}/dir.jks",
+        password    => $dir_jks_password,
+      }
 
-  java_ks {'osd_client_ca':
-    ensure      => latest,
-    certificate => "${ssl_source_dir}/${client_ca}",
-    target      => "${ks_base}/osd.jks",
-    password    => $osd_jks_password,
-  }
+      java_ks {"dir_mrc_ca:${ks_base}/dir.jks":
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${mrc_ca}",
+        password    => $dir_jks_password,
+      }
 
-  java_ks {"osd_dir_ca:${ks_base}/osd.jks":
-    ensure      => latest,
-    certificate => "${ssl_source_dir}/${dir_ca}",
-    password    => $osd_jks_password,
+      java_ks {"dir_osd_ca:${ks_base}/dir.jks":
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${osd_ca}",
+        password    => $dir_jks_password,
+      }
+      java_ks {'mrc_client_ca':
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${client_ca}",
+        target      => "${ks_base}/mrc.jks",
+        password    => $mrc_jks_password,
+      }
+
+      java_ks {"mrc_dir_ca:${ks_base}/mrc.jks":
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${dir_ca}",
+        password    => $mrc_jks_password,
+      }
+    }
+
+    mrc: {
+      java_ks {'mrc_client_ca':
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${client_ca}",
+        target      => "${ks_base}/mrc.jks",
+        password    => $mrc_jks_password,
+      }
+
+      java_ks {"mrc_dir_ca:${ks_base}/mrc.jks":
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${dir_ca}",
+        password    => $mrc_jks_password,
+      }
+    }
+
+    osd: {
+      java_ks {'osd_client_ca':
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${client_ca}",
+        target      => "${ks_base}/osd.jks",
+        password    => $osd_jks_password,
+      }
+
+      java_ks {"osd_dir_ca:${ks_base}/osd.jks":
+        ensure      => latest,
+        certificate => "${ssl_source_dir}/${dir_ca}",
+        password    => $osd_jks_password,
+      }
+    }
+    default: { fail "Unknown role ${role}" }
   }
 }
