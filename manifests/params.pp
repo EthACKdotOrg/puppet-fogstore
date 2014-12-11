@@ -1,3 +1,4 @@
+# Parameter class
 class fogstore::params {
 
   # default APT repository key
