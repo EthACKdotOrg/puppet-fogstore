@@ -22,7 +22,7 @@ describe 'osd' do
       }
     end
     
-    describe 'should add source' do
+    describe 'APT source' do
       it {
         should contain_apt__source('xtreemfs')
         .with('ensure'      => 'present')
@@ -35,7 +35,7 @@ describe 'osd' do
       }
     end
     
-    describe 'should create trust store directory' do
+    describe 'Trust store' do
       it {
         should contain_file('/etc/xos/xtreemfs/truststore')
         .with('ensure' => 'directory')
@@ -43,11 +43,23 @@ describe 'osd' do
         .with('mode'   => '0750')
         .with('owner'  => 'root')
       }
+      it {
+        should contain_class('fogstore::ssl::trusted')
+      }
     end
 
-    describe 'should include fogstore::roles::osd' do
+    describe 'Include fogstore::roles::osd' do
       it {
         should contain_class('fogstore::roles::osd')
+      }
+    end
+
+    describe 'Install XtreemFS and configure' do
+      it {
+        should contain_package('xtreemfs-server')
+      }
+      it {
+        should contain_class('xtreemfs::internal::configure::storage')
       }
     end
 
