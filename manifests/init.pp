@@ -121,7 +121,9 @@ class fogstore(
   $cred_keys           = {},
   $dir_ca              = false,
   $dir_jks_password    = false,
-  $dir_service         = $fogstore::params::dir_service,
+  $dir_host            = $fogstore::params::dir_host,
+  $dir_poer            = $fogstore::params::dir_port,
+  $dir_protocol        = $fogstore::params::dir_protocol,
   $manage_ssl          = true,
   $mrc_ca              = false,
   $mrc_jks_password    = false,
@@ -199,7 +201,23 @@ class fogstore(
     }
   }
 
-  if $pkg_source {
+  include ::xtreemfs::internal::workflow
+
+  class {'::apt':
+    purge_sources_list   => true,
+    purge_sources_list_d => true,
+    purge_preferences_d  => true,
+  }
+  ::apt::conf {'ignore-suggests':
+    content => 'APT::Install-Suggests "0";',
+  }
+  ::apt::pin {'nox':
+    packages => 'xserver-xorg-core',
+    origin   => 'Debian',
+    priority => '-1',
+  }
+
+  if $pkg_source and $pkg_source != '' {
     $_repository = false
     ::apt::source {'xtreemfs':
       ensure      => present,
@@ -220,7 +238,7 @@ class fogstore(
       group   => 'xtreemfs',
       mode    => '0750',
       owner   => 'root',
-      require => Anchor[$::xtreemfs::internal::workflow::package],
+      require => Anchor[$::xtreemfs::internal::workflow::packages],
     }
   }
 
@@ -250,9 +268,11 @@ class fogstore(
       add_repo         => $_repository,
       cred_format      => $cred_format,
       cred_password    => $cred_password,
+      credential       => $cred_cert,
       object_dir       => $object_dir,
       properties       => $properties,
       ssl_source_dir   => $ssl_source_dir,
+      trusted          => "${role}.jks",
       trusted_format   => $trusted_format,
       trusted_password => $trusted_password,
     }
