@@ -9,6 +9,16 @@ describe 'osd' do
       facts
     end
 
+    describe 'Global' do
+      it { should compile }
+    end
+
+    describe 'Dependences' do
+      it {
+        should contain_class('xtreemfs::internal::workflow')
+      }
+    end
+
     describe 'Configure APT' do
       it { 
         should contain_apt__conf('ignore-suggests')
@@ -20,9 +30,6 @@ describe 'osd' do
         .with('origin'   => 'Debian')
         .with('priority' => '-1')
       }
-    end
-    
-    describe 'APT source' do
       it {
         should contain_apt__source('xtreemfs')
         .with('ensure'      => 'present')
@@ -45,6 +52,23 @@ describe 'osd' do
       }
       it {
         should contain_class('fogstore::ssl::trusted')
+          .with('client_ca'           => 'client-ca.pem')
+          .with('dir_ca'              => 'dir-ca.pem')
+          .with('mrc_ca'              => 'mrc-ca.pem')
+          .with('osd_ca'              => 'osd-ca.pem')
+          .with('osd_jks_password'    => 'osd-jks')
+          .with('ssl_source_dir'      => 'file://.')
+      }
+      it {
+        should contain_java_ks('osd_client_ca')
+        .with('certificate' => 'file://./client-ca.pem')
+        .with('target'      => '/etc/xos/xtreemfs/truststore/osd.jks')
+        .with('password'    => 'osd-jks')
+      }
+      it {
+        should contain_java_ks('osd_dir_ca:/etc/xos/xtreemfs/truststore/osd.jks')
+        .with('certificate' => 'file://./dir-ca.pem')
+        .with('password'    => 'osd-jks')
       }
     end
 
@@ -61,7 +85,17 @@ describe 'osd' do
       it {
         should contain_class('xtreemfs::internal::configure::storage')
       }
+      it {
+        should contain_class('fogstore::roles::osd')
+          .with('add_repo'         => false)
+          .with('cred_format'      => 'pkcs12')
+          .with('cred_password'    => 'credential-password')
+          .with('credential'       => 'credential.pem')
+          .with('ssl_source_dir'   => 'file://.')
+          .with('trusted'          => 'osd.jks')
+          .with('trusted_format'   => 'jks')
+          .with('trusted_password' => 'osd-jks')
+      }
     end
-
   end
 end
