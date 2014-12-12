@@ -7,6 +7,7 @@ group :test do
   gem "metadata-json-lint",     :require => false
   gem 'puppet-lint',            :require => false
   gem 'puppet_facts',           :require => false, :git => 'https://github.com/camptocamp/puppet_facts.git'
+  gem 'coveralls',              :require => false
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']
