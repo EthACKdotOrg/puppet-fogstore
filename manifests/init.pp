@@ -135,6 +135,7 @@ class fogstore(
   $repos               = './',
   $pkg_source          = false,
   $trusted_format      = $fogstore::params::trusted_format,
+  $trusted             = "${role}.jks",
 ) inherits fogstore::params {
 
   if $role !~ /client|dir|introducer|mrc|osd/ {
@@ -162,7 +163,6 @@ class fogstore(
           fail 'Needs dir_jks_password for dir'
         }
         $trusted_password = $dir_jks_password
-        include ::fogstore::ssl::trusted
         ::fogstore::ssl::credential{'dir': }
       }
       'introducer': {
@@ -183,7 +183,6 @@ class fogstore(
           fail 'Need mrc_jks_password for mrc (introducer)'
         }
         ::fogstore::ssl::credential{'mrc': }
-        include ::fogstore::ssl::trusted
 
       }
       'mrc': {
@@ -196,7 +195,6 @@ class fogstore(
         }
         $trusted_password = $mrc_jks_password
         ::fogstore::ssl::credential{'mrc': }
-        include ::fogstore::ssl::trusted
       }
       'osd': {
         # osd needs client, dir
@@ -252,6 +250,7 @@ class fogstore(
       owner   => 'root',
       require => Anchor[$::xtreemfs::internal::workflow::packages],
     }
+    include ::fogstore::ssl::trusted
   }
 
   if $role == 'introducer' {
@@ -277,16 +276,7 @@ class fogstore(
     }
   } else {
     class {"::fogstore::roles::${role}":
-      add_repo         => $_repository,
-      cred_format      => $cred_format,
-      cred_password    => $cred_password,
-      credential       => $cred_cert,
-      object_dir       => $object_dir,
-      properties       => $properties,
-      ssl_source_dir   => $ssl_source_dir,
-      trusted          => "${role}.jks",
-      trusted_format   => $trusted_format,
-      trusted_password => $trusted_password,
+      add_repo => $_repository,
     }
   }
 }
