@@ -171,7 +171,6 @@ class fogstore(
         if (!$admin_password or $admin_password == '') {
           fail 'Need admin_password'
         }
-        ::fogstore::ssl::credential{'client': }
       }
       'dir': {
         # dir needs client, mrc, osd
@@ -284,7 +283,26 @@ class fogstore(
   }
 
   case $role {
-    'client': {}
+    'client': {
+      class {"::fogstore::roles::client":
+        add_repo       => $_repository,
+        admin_password => $admin_password,
+        client_ca      => $client_ca,
+        credential     => $cred_cert,
+        cred_key       => $cred_key,
+        cred_password  => $cred_password,
+        dir_ca         => $dir_ca,
+        dir_host       => $dir_host,
+        dir_port       => $dir_port,
+        dir_protocol   => $dir_protocol,
+        manage_ssl     => $manage_ssl,
+        mounts         => $mounts,
+        mrc_ca         => $mrc_ca,
+        osd_ca         => $osd_ca,
+        ssl_source_dir => $ssl_source_dir,
+        volumes        => $volumes,
+      }
+    }
     'dir': {}
     'introducer': {
       class {'::fogstore::roles::mrc':
@@ -310,7 +328,7 @@ class fogstore(
     }
     'mrc': {}
     'osd': {
-      class {"::fogstore::roles::${role}":
+      class {"::fogstore::roles::osd":
         add_repo         => $_repository,
         client_ca        => $client_ca,
         cred_format      => $cred_format,
