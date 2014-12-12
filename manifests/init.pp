@@ -151,6 +151,7 @@ class fogstore(
         if !$dir_ca or !$mrc_ca or !$osd_ca {
           fail 'Needs dir, mrc and osd CAs for client'
         }
+        ::fogstore::ssl::credential{'client': }
       }
       'dir': {
         # dir needs client, mrc, osd
@@ -162,6 +163,7 @@ class fogstore(
         }
         $trusted_password = $dir_jks_password
         include ::fogstore::ssl::trusted
+        ::fogstore::ssl::credential{'dir': }
       }
       'introducer': {
         # dir part needs client, mrc, osd
@@ -171,6 +173,7 @@ class fogstore(
         if !$dir_jks_password {
           fail 'Need dir_jks_password for dir (introducer)'
         }
+        ::fogstore::ssl::credential{'dir': }
 
         # mrc part needs client, dir
         if !$client_ca or !$dir_ca {
@@ -179,6 +182,7 @@ class fogstore(
         if !$mrc_jks_password {
           fail 'Need mrc_jks_password for mrc (introducer)'
         }
+        ::fogstore::ssl::credential{'mrc': }
         include ::fogstore::ssl::trusted
 
       }
@@ -191,6 +195,7 @@ class fogstore(
           fail 'Need mrc_jks_password for mrc'
         }
         $trusted_password = $mrc_jks_password
+        ::fogstore::ssl::credential{'mrc': }
         include ::fogstore::ssl::trusted
       }
       'osd': {
@@ -201,6 +206,7 @@ class fogstore(
         if !$osd_jks_password {
           fail 'Need osd_jks_password for osd'
         }
+        ::fogstore::ssl::credential{'osd': }
         $trusted_password = $osd_jks_password
       }
       default : { fail "Unknown role: ${role}" }
