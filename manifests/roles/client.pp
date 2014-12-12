@@ -1,4 +1,4 @@
-class fogstore::roles::client {
+class fogstore::roles::client (
   $credential      = $fogstore::cred_cert,
   $add_repo        = $fogstore::add_repo,
   $cred_format     = $fogstore::cred_format,
