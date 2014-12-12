@@ -4,6 +4,7 @@ node client {
   $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
     add_repo       => true,
+    admin_password => 'fooBar',
     apt_key_src    => "${repo}/Release.key",
     cred_cert      => 'credential.pem',
     cred_key       => 'credential.key',
@@ -14,6 +15,14 @@ node client {
     pkg_source     => $repo,
     role           => 'client',
     ssl_source_dir => 'file://.',
+    volumes        => {
+      'test1'      => {
+        ensure     => present,
+      },
+      'test2'      => {
+        ensure     => 'absent',
+      }
+    },
   }
 }
 
