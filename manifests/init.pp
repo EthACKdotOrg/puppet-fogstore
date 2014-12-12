@@ -284,7 +284,7 @@ class fogstore(
 
   case $role {
     'client': {
-      class {"::fogstore::roles::client":
+      class {'::fogstore::roles::client':
         add_repo       => $_repository,
         admin_password => $admin_password,
         client_ca      => $client_ca,
@@ -328,7 +328,7 @@ class fogstore(
     }
     'mrc': {}
     'osd': {
-      class {"::fogstore::roles::osd":
+      class {'::fogstore::roles::osd':
         add_repo         => $_repository,
         client_ca        => $client_ca,
         cred_format      => $cred_format,
