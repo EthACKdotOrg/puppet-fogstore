@@ -55,7 +55,7 @@ describe 'osd' do
           .with('client_ca'           => 'client-ca.pem')
           .with('dir_ca'              => 'dir-ca.pem')
           .with('mrc_ca'              => 'mrc-ca.pem')
-          .with('osd_ca'              => 'osd-ca.pem')
+          .with('osd_ca'              => false)
           .with('osd_jks_password'    => 'osd-jks')
           .with('ssl_source_dir'      => 'file://.')
       }
@@ -91,7 +91,7 @@ describe 'osd' do
         .with('basedir'  => '/etc/ssl/certs')
         .with('cert'     => '/etc/ssl/certs/xtreemfs-credentials-osd.pem')
         .with('pkey'     => 'file://./credential.key')
-        .with('out_pass' => 'osd-jks')
+        .with('out_pass' => 'credential-password')
       }
     end
 
