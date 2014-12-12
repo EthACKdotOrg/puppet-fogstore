@@ -22,19 +22,19 @@
 #
 # NOTE: $properties might override the $local_properties!
 class fogstore::roles::osd(
-  $credential,
-  $trusted,
-  $add_repo        = $fogstore::add_repo,
-  $cred_format     = $fogstore::cred_format,
-  $cred_password   = $fogstore::cred_password,
-  $dir_host        = $fogstore::dir_host,
-  $dir_port        = $fogstore::dir_port,
-  $dir_protocol    = $fogstore::dir_protocol,
-  $manage_jks      = true,
-  $object_dir      = undef,
-  $properties      = {},
-  $ssl_source_dir  = $fogstore::ssl_source_dir,
-  $trusted_format  = $fogstore::trusted_format,
+  $add_repo         = $fogstore::add_repo,
+  $cred_format      = $fogstore::cred_format,
+  $cred_password    = $fogstore::cred_password,
+  $credential       = $fogstore::cred_cert,
+  $dir_host         = $fogstore::dir_host,
+  $dir_port         = $fogstore::dir_port,
+  $dir_protocol     = $fogstore::dir_protocol,
+  $manage_jks       = $fogstore::manage_ssl,
+  $object_dir       = $fogstore::object_dir,
+  $properties       = $fogstore::properties,
+  $ssl_source_dir   = $fogstore::ssl_source_dir,
+  $trusted          = $fogstore::trusted,
+  $trusted_format   = $fogstore::trusted_format,
   $trusted_password = $fogstore::osd_jks_password,
 ) {
   include ::fogstore::params
