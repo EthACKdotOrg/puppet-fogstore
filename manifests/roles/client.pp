@@ -42,8 +42,11 @@ class fogstore::roles::client (
     Xtreemfs::Mount <||>
   }
 
+  class {'::xtreemfs::settings':
+    add_repo => $add_repo,
+  }
   if $add_repo {
-    # TODO, see wavesoftware/puppet-xtreemfs#16
+    include ::xtreemfs::internal::repo
   }
 
   $defaults = {
