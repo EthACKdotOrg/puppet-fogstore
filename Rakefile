@@ -20,8 +20,8 @@ end
 desc "Run syntax, lint, and spec tests."
 task :test => [
   :metadata,
-#  :syntax,
-  :spec_clean,
+  :syntax,
   :lint,
-  :spec,
+  :spec_prep,
+  :spec_standalone,
 ]
