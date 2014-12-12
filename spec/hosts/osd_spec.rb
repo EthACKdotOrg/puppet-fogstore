@@ -72,6 +72,29 @@ describe 'osd' do
       }
     end
 
+    describe 'Credentials' do
+      it {
+        should contain_fogstore__ssl__credential('osd')
+      }
+
+      it {
+        should contain_file('/etc/ssl/certs/xtreemfs-credentials-osd.pem')
+        .with('source' => [
+          "file://./credential.pem",
+          "file://./client-ca.pem",
+          "file://./dir-ca.pem",
+          "file://./mrc-ca.pem",
+        ])
+      } 
+      it {
+        should contain_openssl__export__pkcs12('xtreemfs-credentials-osd')
+        .with('basedir'  => '/etc/ssl/certs')
+        .with('cert'     => '/etc/ssl/certs/xtreemfs-credentials-osd.pem')
+        .with('pkey'     => 'file://./credential.key')
+        .with('out_pass' => 'osd-jks')
+      }
+    end
+
     describe 'Include fogstore::roles::osd' do
       it {
         should contain_class('fogstore::roles::osd')
