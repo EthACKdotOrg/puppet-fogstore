@@ -13,7 +13,7 @@ describe 'osd' do
       it { should compile }
     end
 
-    describe 'Dependences' do
+    describe 'Dependencies' do
       it {
         should contain_class('xtreemfs::internal::workflow')
       }
