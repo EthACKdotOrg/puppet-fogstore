@@ -22,22 +22,24 @@
 #
 # NOTE: $properties might override the $local_properties!
 class fogstore::roles::osd(
-  $add_repo         = $fogstore::add_repo,
-  $cred_format      = $fogstore::cred_format,
-  $cred_password    = $fogstore::cred_password,
-  $credential       = $fogstore::cred_cert,
-  $dir_host         = $fogstore::dir_host,
-  $dir_port         = $fogstore::dir_port,
-  $dir_protocol     = $fogstore::dir_protocol,
-  $manage_jks       = $fogstore::manage_ssl,
-  $object_dir       = $fogstore::object_dir,
-  $properties       = $fogstore::properties,
-  $ssl_source_dir   = $fogstore::ssl_source_dir,
-  $trusted          = $fogstore::trusted,
-  $trusted_format   = $fogstore::trusted_format,
-  $trusted_password = $fogstore::osd_jks_password,
-) {
-  include ::fogstore::params
+  $add_repo         = $fogstore::params::add_repo,
+  $client_ca        = $fogstore::params::client_ca,
+  $cred_format      = $fogstore::params::cred_format,
+  $cred_password    = $fogstore::params::cred_password,
+  $credential       = $fogstore::params::cred_cert,
+  $dir_ca           = $fogstore::params::dir_ca,
+  $dir_host         = $fogstore::params::dir_host,
+  $dir_port         = $fogstore::params::dir_port,
+  $dir_protocol     = $fogstore::params::dir_protocol,
+  $manage_jks       = $fogstore::params::manage_ssl,
+  $mrc_ca           = $fogstore::params::mrc_ca,
+  $object_dir       = $fogstore::params::object_dir,
+  $properties       = $fogstore::params::properties,
+  $ssl_source_dir   = $fogstore::params::ssl_source_dir,
+  $trusted          = $fogstore::params::trusted,
+  $trusted_format   = $fogstore::params::trusted_format,
+  $trusted_password = $fogstore::params::osd_jks_password,
+) inherits fogstore::params {
 
   # Set SSL configuration by default
   $local_properties = {
@@ -58,7 +60,14 @@ class fogstore::roles::osd(
   }
 
   if ($manage_jks) {
-    include ::fogstore::ssl::trusted
+    class {'::fogstore::ssl::trusted':
+      client_ca        => $client_ca,
+      dir_ca           => $dir_ca,
+      mrc_ca           => $mrc_ca,
+      osd_jks_password => $trusted_password,
+      role             => 'osd',
+      ssl_source_dir   => $ssl_source_dir,
+    }
   }
 
   class {'::xtreemfs::role::storage':

@@ -110,33 +110,35 @@ class fogstore(
   $cred_password,
   $role,
   $ssl_source_dir,
-  $add_repo            = true,
+  $add_repo            = $fogstore::params::add_repo,
+  $admin_password      = $fogstore::params::admin_password,
   $apt_key             = $fogstore::params::apt_key,
-  $apt_key_src         = "${pkg_source}/Release.key",
-  $client_ca           = false,
-  $cred_cert           = false,
-  $cred_certs          = {},
+  $apt_key_src         = $fogstore::params::apt_key_src,
+  $client_ca           = $fogstore::params::client_ca,
+  $cred_cert           = $fogstore::params::cred_cert,
+  $cred_certs          = $fogstore::params::cred_certs,
   $cred_format         = $fogstore::params::cred_format,
-  $cred_key            = false,
-  $cred_keys           = {},
-  $dir_ca              = false,
-  $dir_jks_password    = false,
+  $cred_key            = $fogstore::params::cred_key,
+  $cred_keys           = $fogstore::params::cred_keys,
+  $dir_ca              = $fogstore::params::dir_ca,
+  $dir_jks_password    = $fogstore::params::dir_jks_password,
   $dir_host            = $fogstore::params::dir_host,
-  $dir_poer            = $fogstore::params::dir_port,
+  $dir_port            = $fogstore::params::dir_port,
   $dir_protocol        = $fogstore::params::dir_protocol,
-  $manage_ssl          = true,
-  $mounts              = {},
-  $mrc_ca              = false,
-  $mrc_jks_password    = false,
-  $object_dir          = undef,
-  $osd_ca              = false,
-  $osd_jks_password    = false,
-  $properties          = {},
-  $release             = '',
-  $repos               = './',
-  $pkg_source          = false,
+  $manage_ssl          = $fogstore::params::manage_ssl,
+  $mounts              = $fogstore::params::mounts,
+  $mrc_ca              = $fogstore::params::mrc_ca,
+  $mrc_jks_password    = $fogstore::params::mrc_jks_password,
+  $object_dir          = $fogstore::params::object_dir,
+  $osd_ca              = $fogstore::params::osd_ca,
+  $osd_jks_password    = $fogstore::params::osd_jks_password,
+  $properties          = $fogstore::params::properties,
+  $release             = $fogstore::params::release,
+  $repos               = $fogstore::params::repos,
+  $pkg_source          = $fogstore::params::pkg_source,
   $trusted_format      = $fogstore::params::trusted_format,
   $trusted             = "${role}.jks",
+  $volumes             = $fogstore::params::volumes,
 ) inherits fogstore::params {
 
   if $role !~ /client|dir|introducer|mrc|osd/ {
@@ -147,11 +149,27 @@ class fogstore(
     if (!$cred_cert or $cred_cert == '') and $cred_certs == {} {
       fail 'Need credential certificate'
     }
+
+    Fogstore::Ssl::Credential{
+      client_ca       => $client_ca,
+      cred_cert       => $cred_cert,
+      cred_key        => $cred_key,
+      cred_password   => $cred_password,
+      destination_dir => $fogstore::params::cred_location,
+      dir_ca          => $dir_ca,
+      mrc_ca          => $mrc_ca,
+      osd_ca          => $osd_ca,
+      ssl_source_dir  => $ssl_source_dir,
+    }
     case $role {
       'client': {
         # client needs dir, mrc, osd in its p12
         if !$dir_ca or !$mrc_ca or !$osd_ca {
           fail 'Needs dir, mrc and osd CAs for client'
+        }
+        # client needs admin password
+        if (!$admin_password or $admin_password == '') {
+          fail 'Need admin_password'
         }
         ::fogstore::ssl::credential{'client': }
       }
@@ -163,10 +181,18 @@ class fogstore(
         if !$dir_jks_password {
           fail 'Needs dir_jks_password for dir'
         }
+        # dir needs admin password
+        if (!$admin_password or $admin_password == '') {
+          fail 'Need admin_password'
+        }
         $trusted_password = $dir_jks_password
         ::fogstore::ssl::credential{'dir': }
       }
       'introducer': {
+        # dir/mrc need admin password
+        if (!$admin_password or $admin_password == '') {
+          fail 'Need admin_password'
+        }
         # dir part needs client, mrc, osd
         if !$client_ca or !$mrc_ca or !$osd_ca {
           fail 'Needs client, mrc and osd CAs for dir (introducer)'
@@ -193,6 +219,10 @@ class fogstore(
         }
         if !$mrc_jks_password {
           fail 'Need mrc_jks_password for mrc'
+        }
+        # mrc needs admin password
+        if (!$admin_password or $admin_password == '') {
+          fail 'Need admin_password'
         }
         $trusted_password = $mrc_jks_password
         ::fogstore::ssl::credential{'mrc': }
@@ -251,33 +281,55 @@ class fogstore(
       owner   => 'root',
       require => Anchor[$::xtreemfs::internal::workflow::packages],
     }
-    include ::fogstore::ssl::trusted
   }
 
-  if $role == 'introducer' {
-    class {'::fogstore::roles::mrc':
-      add_repo         => $_repository,
-      cred_format      => $cred_format,
-      cred_password    => $cred_password,
-      object_dir       => $object_dir,
-      properties       => $properties,
-      ssl_source_dir   => $ssl_source_dir,
-      trusted_format   => $trusted_format,
-      trusted_password => $mrc_jks_password,
+  case $role {
+    'client': {}
+    'dir': {}
+    'introducer': {
+      class {'::fogstore::roles::mrc':
+        add_repo         => $_repository,
+        cred_format      => $cred_format,
+        cred_password    => $cred_password,
+        object_dir       => $object_dir,
+        properties       => $properties,
+        ssl_source_dir   => $ssl_source_dir,
+        trusted_format   => $trusted_format,
+        trusted_password => $mrc_jks_password,
+      }
+      class {'::fogstore::roles::dir':
+        add_repo         => $_repository,
+        cred_format      => $cred_format,
+        cred_password    => $cred_password,
+        object_dir       => $object_dir,
+        properties       => $properties,
+        ssl_source_dir   => $ssl_source_dir,
+        trusted_format   => $trusted_format,
+        trusted_password => $dir_jks_password,
+      }
     }
-    class {'::fogstore::roles::dir':
-      add_repo         => $_repository,
-      cred_format      => $cred_format,
-      cred_password    => $cred_password,
-      object_dir       => $object_dir,
-      properties       => $properties,
-      ssl_source_dir   => $ssl_source_dir,
-      trusted_format   => $trusted_format,
-      trusted_password => $dir_jks_password,
+    'mrc': {}
+    'osd': {
+      class {"::fogstore::roles::${role}":
+        add_repo         => $_repository,
+        client_ca        => $client_ca,
+        cred_format      => $cred_format,
+        cred_password    => $cred_password,
+        credential       => $cred_cert,
+        dir_ca           => $dir_ca,
+        dir_host         => $dir_host,
+        dir_port         => $dir_port,
+        dir_protocol     => $dir_protocol,
+        manage_jks       => $manage_ssl,
+        mrc_ca           => $mrc_ca,
+        object_dir       => $object_dir,
+        properties       => $properties,
+        ssl_source_dir   => $ssl_source_dir,
+        trusted          => $trusted,
+        trusted_format   => $trusted_format,
+        trusted_password => $osd_jks_password,
+      }
     }
-  } else {
-    class {"::fogstore::roles::${role}":
-      add_repo => $_repository,
-    }
+    default: { fail "Unknown role ${role}" }
   }
 }

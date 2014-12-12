@@ -33,16 +33,16 @@
 #       Source directory for SSL certificates
 #
 define fogstore::ssl::credential(
-  $client_ca       = $fogstore::client_ca,
-  $cred_cert       = $fogstore::cred_cert,
-  $cred_key        = $fogstore::cred_key,
-  $cred_password   = $fogstore::cred_password,
+  $client_ca       = $fogstore::params::client_ca,
+  $cred_cert       = $fogstore::params::cred_cert,
+  $cred_key        = $fogstore::params::cred_key,
+  $cred_password   = $fogstore::params::cred_password,
   $destination_dir = $fogstore::params::cred_location,
-  $dir_ca          = $fogstore::dir_ca,
-  $mrc_ca          = $fogstore::mrc_ca,
-  $osd_ca          = $fogstore::osd_ca,
-  $role            = $fogstore::role,
-  $ssl_source_dir  = $fogstore::ssl_source_dir,
+  $dir_ca          = $fogstore::params::dir_ca,
+  $mrc_ca          = $fogstore::params::mrc_ca,
+  $osd_ca          = $fogstore::params::osd_ca,
+  $role            = $title,
+  $ssl_source_dir  = $fogstore::params::ssl_source_dir,
 ) {
 
   case $role {
