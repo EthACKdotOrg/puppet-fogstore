@@ -27,16 +27,17 @@ class fogstore::roles::osd(
   $add_repo        = $fogstore::add_repo,
   $cred_format     = $fogstore::cred_format,
   $cred_password   = $fogstore::cred_password,
-  $dir_host        = $fogstore::params::dir_host,
-  $dir_port        = $fogstore::params::dir_port,
-  $dir_protocol    = $fogstore::params::dir_protocol,
+  $dir_host        = $fogstore::dir_host,
+  $dir_port        = $fogstore::dir_port,
+  $dir_protocol    = $fogstore::dir_protocol,
   $manage_jks      = true,
   $object_dir      = undef,
   $properties      = {},
   $ssl_source_dir  = $fogstore::ssl_source_dir,
   $trusted_format  = $fogstore::trusted_format,
   $trusted_password = $fogstore::osd_jks_password,
-) inherits fogstore::params {
+) {
+  include ::fogstore::params
 
   # Set SSL configuration by default
   $local_properties = {
