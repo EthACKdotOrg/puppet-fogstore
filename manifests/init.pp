@@ -125,6 +125,7 @@ class fogstore(
   $dir_poer            = $fogstore::params::dir_port,
   $dir_protocol        = $fogstore::params::dir_protocol,
   $manage_ssl          = true,
+  $mounts              = {},
   $mrc_ca              = false,
   $mrc_jks_password    = false,
   $object_dir          = undef,
