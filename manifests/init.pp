@@ -272,16 +272,6 @@ class fogstore(
     $_repository = $add_repo
   }
 
-  if $role =~ /(osd|mrc|dir|introducer)/ and $manage_ssl {
-    file {$::fogstore::params::trust_location:
-      ensure  => directory,
-      group   => 'xtreemfs',
-      mode    => '0750',
-      owner   => 'root',
-      require => Anchor[$::xtreemfs::internal::workflow::packages],
-    }
-  }
-
   case $role {
     'client': {
       class {'::fogstore::roles::client':
