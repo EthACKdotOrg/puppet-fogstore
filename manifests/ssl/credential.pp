@@ -45,8 +45,19 @@ define fogstore::ssl::credential(
   $ssl_source_dir  = $fogstore::params::ssl_source_dir,
 ) {
 
+  if !$cred_cert or $cred_cert == '' or
+      !$cred_key or $cred_key == '' or
+      !$cred_password or $cred_password == '' {
+        fail 'Need cred_cert, cred_key and cred_password'
+  }
+
   case $role {
     client: {
+      if !$dir_ca or $dir_ca == '' or
+          !$mrc_ca or $mrc_ca == '' or
+          !$osd_ca or $osd_ca == '' {
+            fail 'Need dir_ca, mrc_ca and osd_ca'
+      }
       $source = [
         "${ssl_source_dir}/${cred_cert}",
         "${ssl_source_dir}/${dir_ca}",
@@ -55,6 +66,11 @@ define fogstore::ssl::credential(
       ]
     }
     dir: {
+      if !$client_ca or $client_ca == '' or
+          !$mrc_ca or $mrc_ca == '' or
+          !$osd_ca or $osd_ca == '' {
+            fail 'Need dir_ca, mrc_ca and osd_ca'
+      }
       $source = [
         "${ssl_source_dir}/${cred_cert}",
         "${ssl_source_dir}/${client_ca}",
@@ -63,6 +79,11 @@ define fogstore::ssl::credential(
       ]
     }
     mrc: {
+      if !$client_ca or $client_ca == '' or
+          !$dir_ca or $dir_ca == '' or
+          !$osd_ca or $osd_ca == '' {
+            fail 'Need dir_ca, mrc_ca and osd_ca'
+      }
       $source = [
         "${ssl_source_dir}/${cred_cert}",
         "${ssl_source_dir}/${client_ca}",
@@ -71,6 +92,11 @@ define fogstore::ssl::credential(
       ]
     }
     osd: {
+      if !$client_ca or $client_ca == '' or
+          !$dir_ca or $dir_ca == '' or
+          !$mrc_ca or $mrc_ca == '' {
+            fail 'Need dir_ca, mrc_ca and osd_ca'
+      }
       $source = [
         "${ssl_source_dir}/${cred_cert}",
         "${ssl_source_dir}/${client_ca}",
