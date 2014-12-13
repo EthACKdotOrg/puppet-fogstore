@@ -7,42 +7,70 @@ os_facts.each do |osfamily, facts|
     let :facts do
       facts
     end
-    let(:params) {{
-      :add_repo        => false,
-      :admin_password  => 'foobarbaz',
-      :credential      => 'credential.pem',
-      :cred_password   => 'abcdefg',
-      :cred_key        => 'credential.key',
-      :dir_ca          => 'dir-ca.pem',
-      :manage_ssl      => true,
-      :mrc_ca          => 'mrc-ca.pem',
-      :mounts          => {
-        '/mnt/test1' => {
-          'ensure'   => 'mounted',
-          'volume'   => 'test1',
-        },
-        '/mnt/test2' => {
-          'ensure'   => 'absent',
-          'volume'   => 'test2',
-        }
-      },
-      :osd_ca          => 'osd-ca.pem',
-      :ssl_source_dir  => 'file://.',
-      :volumes         => {
-        'test1'    => {
-          'ensure' => 'present',
-        },
-        'test2'    => {
-          'ensure' => 'absent',
-        }
-      },
-    }}
 
-    it {
-      should compile
-    }
+    context 'Client: missing admin_password' do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it {
+        expect {
+          should compile.with_all_deps
+        }.to raise_error()
+      }
+    end
 
-    describe 'SSL configuration' do
+    describe 'working' do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => 'foobarbaz',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          mounts          => {
+            '/mnt/test1' => {
+              'ensure'   => 'mounted',
+              'volume'   => 'test1',
+            },
+            '/mnt/test2' => {
+              'ensure'   => 'absent',
+              'volume'   => 'test2',
+            }
+          },
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+          volumes         => {
+            'test1'    => {
+              'ensure' => 'present',
+            },
+            'test2'    => {
+              'ensure' => 'absent',
+            }
+          },
+        }
+        "
+      end
+
+      it {
+        should compile.with_all_deps
+      }
+
       it {
         should contain_fogstore__ssl__credential('client')
         .with('client_ca'       => false)
@@ -56,15 +84,10 @@ os_facts.each do |osfamily, facts|
         .with('role'            => 'client')
         .with('ssl_source_dir'  => 'file://.')
       }
-    end
-    describe 'XtreemFS Setting' do
       it {
         should contain_class('xtreemfs::settings')
         .with('add_repo' => false)
       }
-    end
-
-    describe 'XtreemFS Volumes' do
       it {
         should contain_xtreemfs__volume('test1')
         .with('ensure'        => 'present')
@@ -91,10 +114,23 @@ os_facts.each do |osfamily, facts|
       }
     end
 
-    describe 'XtreemFS Settings: repository' do
-      let(:params) {{
-        :add_repo => true,
-      }}
+    describe 'working with repository' do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => true,
+          admin_password  => 'foobarbaz',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
 
       it {
         should contain_class('xtreemfs::settings')
