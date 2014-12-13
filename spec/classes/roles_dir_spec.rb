@@ -44,6 +44,12 @@ describe 'fogstore::roles::dir' do
       it {
         should contain_package('xtreemfs-server')
       }
+      it {
+        should contain_class('fogstore::user')
+      }
+      it {
+        should contain_user('xtreemfs')
+      }
     end
 
     context 'Add properies' do

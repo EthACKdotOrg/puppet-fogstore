@@ -70,6 +70,12 @@ os_facts.each do |osfamily, facts|
       it {
         should compile.with_all_deps
       }
+      it {
+        should contain_class('fogstore::user')
+      }
+      it {
+        should contain_user('xtreemfs')
+      }
 
       it {
         should contain_fogstore__ssl__credential('client')

@@ -41,6 +41,8 @@ class fogstore::roles::osd(
   $trusted_password = $fogstore::params::osd_jks_password,
 ) inherits fogstore::params {
 
+  include ::fogstore::user
+
   # Set SSL configuration by default
   $local_properties = {
     'ssl.enabled' =>
