@@ -41,6 +41,8 @@ end
   }
 }
 @trusted_roles = ['dir','introducer','mrc', 'osd']
+@srv_roles = ['dir','mrc', 'osd']
+@roles = ['client', 'dir','mrc', 'osd']
 
 require 'pathname'
 dir = Pathname.new(__FILE__).parent
