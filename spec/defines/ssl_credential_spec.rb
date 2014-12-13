@@ -36,9 +36,117 @@ describe 'fogstore::ssl::credential' do
     end
     let(:path) { '/bin:/sbin:/usr/bin:/usr/sbin' }
 
+    describe 'Unknown role' do
+      let(:title) { 'failure' }
+      let(:params) {{
+        :client_ca       => 'client-ca.pem',
+        :cred_cert       => "failure-credential.pem",
+        :cred_key        => "failure-credential.key",
+        :cred_password   => "failure-credential",
+        :destination_dir => '/etc/ssl/certs',
+        :dir_ca          => 'dir-ca.pem',
+        :mrc_ca          => 'mrc-ca.pem',
+        :osd_ca          => 'osd-ca.pem',
+        :ssl_source_dir  => 'file://.',
+      }}
+      it {
+        expect {
+          should compile.with_all_deps
+        }.to raise_error()
+      }
+    end
+
     roles.each do |role|
 
-      describe "Role: #{role}" do
+      context "Role: #{role} (failures)" do
+        let(:title) { role }
+        let(:params) {{
+          :client_ca => false,
+        }}
+        it {
+          expect {
+            should compile.with_all_deps
+          }.to raise_error()
+        }
+        case role
+        when 'dir'
+          let(:params) {{
+            :client_ca => 'client-ca.pem',
+          }}
+          it {
+            expect {
+              should compile.with_all_deps
+            }.to raise_error()
+          }
+          let(:params) {{
+            :client_ca => 'client-ca.pem',
+            :mrc_ca    => 'mrc-ca.pem',
+          }}
+          it {
+            expect {
+              should compile.with_all_deps
+            }.to raise_error()
+          }
+          let(:params) {{
+            :client_ca => 'client-ca.pem',
+            :mrc_ca    => 'mrc-ca.pem',
+            :osd_ca    => 'osd-ca.pem',
+          }}
+          it {
+            expect {
+              should compile.with_all_deps
+            }.to raise_error()
+          }
+        when 'mrc'
+          let(:params) {{
+            :client_ca => 'client-ca.pem',
+          }}
+          it {
+            expect {
+              should compile.with_all_deps
+            }.to raise_error()
+          }
+          let(:params) {{
+            :client_ca => 'client-ca.pem',
+            :dir_ca    => 'dir-ca.pem',
+          }}
+          it {
+            expect {
+              should compile.with_all_deps
+            }.to raise_error()
+          }
+        when 'osd'
+          let(:params) {{
+            :client_ca => 'client-ca.pem',
+          }}
+          it {
+            expect {
+              should compile.with_all_deps
+            }.to raise_error()
+          }
+          let(:params) {{
+            :client_ca => 'client-ca.pem',
+            :dir_ca    => 'dir-ca.pem',
+          }}
+          it {
+            expect {
+              should compile.with_all_deps
+            }.to raise_error()
+          }
+          let(:params) {{
+            :client_ca => 'client-ca.pem',
+            :dir_ca    => 'dir-ca.pem',
+            :mrc_ca    => 'mrc-ca.pem',
+          }}
+          it {
+            expect {
+              should compile.with_all_deps
+            }.to raise_error()
+          }
+        end
+      end
+
+      context "Role: #{role} (working)" do
         let(:title) { role }
         let(:params) {{
           :client_ca       => 'client-ca.pem',
