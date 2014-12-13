@@ -40,6 +40,7 @@ end
     :path                   => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
 }
+@trusted_roles = ['dir','introducer','mrc', 'osd']
 
 require 'pathname'
 dir = Pathname.new(__FILE__).parent
