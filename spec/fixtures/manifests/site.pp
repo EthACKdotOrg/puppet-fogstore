@@ -93,6 +93,23 @@ node mrc {
   }
 }
 
+node 'mrc.missing-ca.fail' {
+  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
+  class {'::fogstore':
+    add_repo         => true,
+    admin_password   => 'admin-password',
+    apt_key_src      => "${repo}/Release.key",
+    cred_cert        => 'credential.pem',
+    cred_key         => 'credential.key',
+    cred_password    => 'credential-password',
+    dir_ca           => 'dir-ca.pem',
+    mrc_jks_password => 'mrc-jks',
+    pkg_source       => $repo,
+    role             => 'mrc',
+    ssl_source_dir   => 'file://.',
+  }
+}
+
 node osd {
   $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
