@@ -7,6 +7,9 @@
 #
 # [*cred_password*]
 #       Password for credential container.
+## OR
+# [*cred_passwords*]
+#       Password for credential container.
 #
 # [*role*]
 #       Node role. Accepted:
@@ -107,7 +110,6 @@
 #       Trusted store container format.
 #
 class fogstore(
-  $cred_password,
   $role,
   $ssl_source_dir,
   $add_repo            = $fogstore::params::add_repo,
@@ -120,6 +122,8 @@ class fogstore(
   $cred_format         = $fogstore::params::cred_format,
   $cred_key            = $fogstore::params::cred_key,
   $cred_keys           = $fogstore::params::cred_keys,
+  $cred_password       = false,
+  $cred_passwords      = {},
   $dir_ca              = $fogstore::params::dir_ca,
   $dir_jks_password    = $fogstore::params::dir_jks_password,
   $dir_host            = $fogstore::params::dir_host,
@@ -143,6 +147,10 @@ class fogstore(
 
   if $role !~ /client|dir|introducer|mrc|osd/ {
     fail "Fogstore: unknown node role: ${role}"
+  }
+
+  if (!$cred_password or $cred_password == '') and ($cred_passwords == {}) {
+    fail 'Need either cred_password or cred_passwords!'
   }
 
   if $manage_ssl {
@@ -293,8 +301,50 @@ class fogstore(
         volumes        => $volumes,
       }
     }
-    'dir': {}
+    'dir': {
+      class {'::fogstore::roles::dir':
+        add_repo         => $_repository,
+        client_ca        => $client_ca,
+        cred_format      => $cred_format,
+        cred_password    => $cred_password,
+        credential       => $cred_cert,
+        mrc_ca           => $mrc_ca,
+        osd_ca           => $osd_ca,
+        properties       => $properties,
+        ssl_source_dir   => $ssl_source_dir,
+        trusted          => $trusted,
+        trusted_format   => $trusted_format,
+        trusted_password => $dir_jks_password,
+      }
+    }
     'introducer': {
+      class {'::fogstore::roles::dir':
+        add_repo         => $_repository,
+        client_ca        => $client_ca,
+        cred_format      => $cred_format,
+        cred_password    => $cred_passwords['dir'],
+        credential       => $cred_cert,
+        mrc_ca           => $mrc_ca,
+        osd_ca           => $osd_ca,
+        properties       => $properties,
+        ssl_source_dir   => $ssl_source_dir,
+        trusted          => $trusted,
+        trusted_format   => $trusted_format,
+        trusted_password => $dir_jks_password,
+      }
+      class {'::fogstore::roles::mrc':
+        add_repo         => $_repository,
+        cred_format      => $cred_format,
+        cred_password    => $cred_passwords['mrc'],
+        credential       => $cred_cert,
+        properties       => $properties,
+        ssl_source_dir   => $ssl_source_dir,
+        trusted          => $trusted,
+        trusted_format   => $trusted_format,
+        trusted_password => $mrc_jks_password,
+      }
+    }
+    'mrc': {
       class {'::fogstore::roles::mrc':
         add_repo         => $_repository,
         cred_format      => $cred_format,
@@ -305,18 +355,7 @@ class fogstore(
         trusted_format   => $trusted_format,
         trusted_password => $mrc_jks_password,
       }
-      class {'::fogstore::roles::dir':
-        add_repo         => $_repository,
-        cred_format      => $cred_format,
-        cred_password    => $cred_password,
-        object_dir       => $object_dir,
-        properties       => $properties,
-        ssl_source_dir   => $ssl_source_dir,
-        trusted_format   => $trusted_format,
-        trusted_password => $dir_jks_password,
-      }
     }
-    'mrc': {}
     'osd': {
       class {'::fogstore::roles::osd':
         add_repo         => $_repository,
