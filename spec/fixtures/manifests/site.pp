@@ -75,6 +75,34 @@ node introducer {
   }
 }
 
+node 'introducer.no-adminpwd.fail' {
+  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
+  class {'::fogstore':
+    apt_key_src    => "${repo}/Release.key",
+    client_ca      => 'client-ca.pem',
+    cred_certs     => {
+      'dir'        => 'dir-credential.pem',
+      'mrc'        => 'mrc-credential.pem',
+    },
+    cred_keys      => {
+      'dir'        => 'dir-credential.key',
+      'mrc'        => 'mrc-credential.key',
+    },
+    cred_passwords =>  {
+      'dir'        => 'dir-credential-password',
+      'mrc'        => 'mrc-credential-password',
+    },
+    dir_jks_password => 'dir-jks',
+    dir_ca           => 'dir-ca.pem',
+    mrc_ca           => 'mrc-ca.pem',
+    mrc_jks_password => 'mrc-jks',
+    osd_ca           => 'osd-ca.pem',
+    pkg_source       => $repo,
+    role             => 'introducer',
+    ssl_source_dir   => 'file://.',
+  }
+}
+
 node mrc {
   $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
