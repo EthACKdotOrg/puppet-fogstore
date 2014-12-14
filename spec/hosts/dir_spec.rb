@@ -51,7 +51,7 @@ describe 'dir' do
         .with('owner'  => 'root')
       }
       it {
-        should contain_class('fogstore::ssl::trusted')
+        should contain_fogstore__ssl__trusted('dir')
           .with('client_ca'           => 'client-ca.pem')
           .with('dir_ca'              => false)
           .with('dir_jks_password'    => 'dir-jks')

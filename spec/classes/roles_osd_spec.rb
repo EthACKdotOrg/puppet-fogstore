@@ -50,7 +50,7 @@ describe 'fogstore::roles::osd' do
       }
 
       it {
-        should contain_class('fogstore::ssl::trusted')
+        should contain_fogstore__ssl__trusted('osd')
       }
 
       it {

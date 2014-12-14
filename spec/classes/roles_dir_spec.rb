@@ -29,7 +29,7 @@ describe 'fogstore::roles::dir' do
       }
 
       it {
-        should contain_class('fogstore::ssl::trusted')
+        should contain_fogstore__ssl__trusted('dir')
       }
 
       it {

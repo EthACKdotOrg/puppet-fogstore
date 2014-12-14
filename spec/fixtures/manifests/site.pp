@@ -46,6 +46,27 @@ node dir {
 }
 
 node introducer {
+  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
+  class {'::fogstore':
+    add_repo       => true,
+    admin_password => 'admin-password',
+    apt_key_src    => "${repo}/Release.key",
+    client_ca      => 'client-ca.pem',
+    cred_cert      => 'credential.pem',
+    cred_key       => 'credential.key',
+    cred_passwords =>  {
+      'dir'        => 'dir-credential-password',
+      'mrc'        => 'mrc-credential-password',
+    },
+    dir_jks_password => 'dir-jks',
+    dir_ca           => 'dir-ca.pem',
+    mrc_ca           => 'mrc-ca.pem',
+    mrc_jks_password => 'mrc-jks',
+    osd_ca           => 'osd-ca.pem',
+    pkg_source       => $repo,
+    role             => 'introducer',
+    ssl_source_dir   => 'file://.',
+  }
 }
 
 node mrc {

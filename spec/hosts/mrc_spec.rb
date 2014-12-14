@@ -51,7 +51,7 @@ describe 'mrc' do
         .with('owner'  => 'root')
       }
       it {
-        should contain_class('fogstore::ssl::trusted')
+        should contain_fogstore__ssl__trusted('mrc')
           .with('client_ca'           => 'client-ca.pem')
           .with('dir_ca'              => 'dir-ca.pem')
           .with('mrc_jks_password'    => 'mrc-jks')

@@ -42,12 +42,11 @@ class fogstore::roles::dir(
   }
 
   if ($manage_jks) {
-    class {'::fogstore::ssl::trusted':
+    ::fogstore::ssl::trusted {'dir':
       client_ca        => $client_ca,
       dir_jks_password => $trusted_password,
       mrc_ca           => $mrc_ca,
       osd_ca           => $osd_ca,
-      role             => 'dir',
       ssl_source_dir   => $ssl_source_dir,
     }
   }

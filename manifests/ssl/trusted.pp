@@ -1,4 +1,4 @@
-# == Class: fogstore::ssl::trusted
+# == Define: fogstore::ssl::trusted
 #
 # generate trust stores in JKS format.
 #
@@ -30,25 +30,28 @@
 #       Might be either on the filesystel (file:///…)
 #       or a puppet resource (puppet:///modules/…)
 #
-class fogstore::ssl::trusted (
-  $role,
-  $client_ca           = $fogstore::params::client_ca,
-  $dir_ca              = $fogstore::params::dir_ca,
-  $dir_jks_password    = $fogstore::params::dir_jks_password,
-  $mrc_ca              = $fogstore::params::mrc_ca,
-  $mrc_jks_password    = $fogstore::params::mrc_jks_password,
-  $osd_ca              = $fogstore::params::osd_ca,
-  $osd_jks_password    = $fogstore::params::osd_jks_password,
-  $ssl_source_dir      = $fogstore::params::ssl_source_dir,
-) inherits fogstore::params {
+define fogstore::ssl::trusted (
+  $client_ca           = false,
+  $dir_ca              = false,
+  $dir_jks_password    = false,
+  $mrc_ca              = false,
+  $mrc_jks_password    = false,
+  $osd_ca              = false,
+  $osd_jks_password    = false,
+  $role                = $title,
+  $ssl_source_dir      = false,
+) {
 
+  include ::fogstore::params
   include ::xtreemfs::internal::workflow
-  file {$fogstore::params::trust_location:
-    ensure  => directory,
-    group   => 'xtreemfs',
-    mode    => '0750',
-    owner   => 'root',
-    require => Anchor[$::xtreemfs::internal::workflow::packages],
+  if !defined(File[$fogstore::params::trust_location]) {
+    file {$fogstore::params::trust_location:
+      ensure  => directory,
+      group   => 'xtreemfs',
+      mode    => '0750',
+      owner   => 'root',
+      require => Anchor[$::xtreemfs::internal::workflow::packages],
+    }
   }
 
   Java_ks {

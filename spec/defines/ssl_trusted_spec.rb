@@ -13,12 +13,12 @@ os_facts.each do |osfamily, facts|
       end
 
       context "#{role} without password" do
+        let(:title) { role }
         let(:params) {{
           :client_ca        => 'client-ca.pem',
           :dir_ca           => 'dir-ca.pem',
           :mrc_ca           => 'mrc-ca.pem',
           :osd_ca           => 'osd-ca.pem',
-          :role             => role,
           :ssl_source_dir   => 'file://.',
         }}
         it {
@@ -29,6 +29,7 @@ os_facts.each do |osfamily, facts|
       end
 
       context "#{role} missing ca" do
+        let(:title) { role }
         let(:params) {{
           :dir_ca           => 'dir-ca.pem',
           :dir_jks_password => 'dir-jks-password',
@@ -36,7 +37,6 @@ os_facts.each do |osfamily, facts|
           :mrc_jks_password => 'mrc-jks-password',
           :osd_ca           => 'osd-ca.pem',
           :osd_jks_password => 'osd-jks-password',
-          :role             => role,
           :ssl_source_dir   => 'file://.',
         }}
         it {
@@ -49,13 +49,13 @@ os_facts.each do |osfamily, facts|
     end
 
     context "DIR: working" do
+      let(:title) { 'dir' }
       let(:params) {{
         :client_ca        => 'client-ca.pem',
         :dir_ca           => 'dir-ca.pem',
         :dir_jks_password => 'dir-jks-password',
         :mrc_ca           => 'mrc-ca.pem',
         :osd_ca           => 'osd-ca.pem',
-        :role             => 'dir',
         :ssl_source_dir   => 'file://.',
       }}
       it {
@@ -81,6 +81,7 @@ os_facts.each do |osfamily, facts|
     end
 
     context 'Introducer: working' do
+      let(:title) { 'introducer' }
       let(:params) {{
         :client_ca        => 'client-ca.pem',
         :dir_ca           => 'dir-ca.pem',
@@ -88,7 +89,6 @@ os_facts.each do |osfamily, facts|
         :mrc_ca           => 'mrc-ca.pem',
         :mrc_jks_password => 'mrc-jks-password',
         :osd_ca           => 'osd-ca.pem',
-        :role             => 'introducer',
         :ssl_source_dir   => 'file://.',
       }}
       it {
@@ -127,11 +127,11 @@ os_facts.each do |osfamily, facts|
     end
 
     context "MRC: working" do
+      let(:title) { 'mrc' }
       let(:params) {{
         :client_ca        => 'client-ca.pem',
         :dir_ca           => 'dir-ca.pem',
         :mrc_jks_password => 'mrc-jks-password',
-        :role             => 'mrc',
         :ssl_source_dir   => 'file://.',
       }}
       it {
@@ -153,11 +153,11 @@ os_facts.each do |osfamily, facts|
     end
 
     context "OSD: working" do
+      let(:title) { 'osd' }
       let(:params) {{
         :client_ca        => 'client-ca.pem',
         :dir_ca           => 'dir-ca.pem',
         :osd_jks_password => 'osd-jks-password',
-        :role             => 'osd',
         :ssl_source_dir   => 'file://.',
       }}
       it {

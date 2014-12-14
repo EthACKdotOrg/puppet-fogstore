@@ -51,13 +51,13 @@ describe 'osd' do
         .with('owner'  => 'root')
       }
       it {
-        should contain_class('fogstore::ssl::trusted')
-          .with('client_ca'           => 'client-ca.pem')
-          .with('dir_ca'              => 'dir-ca.pem')
-          .with('mrc_ca'              => 'mrc-ca.pem')
-          .with('osd_ca'              => false)
-          .with('osd_jks_password'    => 'osd-jks')
-          .with('ssl_source_dir'      => 'file://.')
+        should contain_fogstore__ssl__trusted('osd')
+          .with('client_ca'        => 'client-ca.pem')
+          .with('dir_ca'           => 'dir-ca.pem')
+          .with('mrc_ca'           => 'mrc-ca.pem')
+          .with('osd_ca'           => false)
+          .with('osd_jks_password' => 'osd-jks')
+          .with('ssl_source_dir'   => 'file://.')
       }
       it {
         should contain_java_ks('osd_client_ca')

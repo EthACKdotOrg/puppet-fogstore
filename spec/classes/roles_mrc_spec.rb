@@ -26,7 +26,7 @@ describe 'fogstore::roles::mrc' do
         should contain_class('xtreemfs::role::metadata')
       }
       it {
-        should contain_class('fogstore::ssl::trusted')
+        should contain_fogstore__ssl__trusted('mrc')
       }
       it {
         should contain_file('/etc/ssl/certs/mrc.p12')
