@@ -157,6 +157,9 @@ class fogstore(
     if (!$cred_cert or $cred_cert == '') and $cred_certs == {} {
       fail 'Need credential certificate'
     }
+    if (!$cred_key or $cred_key == '') and ($cred_keys == {}) {
+      fail 'Need either cred_key or cred_keys!'
+    }
 
     Fogstore::Ssl::Credential{
       client_ca       => $client_ca,
@@ -207,7 +210,11 @@ class fogstore(
         if !$dir_jks_password {
           fail 'Need dir_jks_password for dir (introducer)'
         }
-        ::fogstore::ssl::credential{'dir': }
+        ::fogstore::ssl::credential{'dir':
+          cred_cert     => $cred_certs['dir'],
+          cred_key      => $cred_keys['dir'],
+          cred_password => $cred_passwords['dir'],
+        }
 
         # mrc part needs client, dir
         if !$client_ca or !$dir_ca {
@@ -216,7 +223,11 @@ class fogstore(
         if !$mrc_jks_password {
           fail 'Need mrc_jks_password for mrc (introducer)'
         }
-        ::fogstore::ssl::credential{'mrc': }
+        ::fogstore::ssl::credential{'mrc':
+          cred_cert     => $cred_certs['mrc'],
+          cred_key      => $cred_keys['mrc'],
+          cred_password => $cred_passwords['mrc'],
+        }
 
       }
       'mrc': {
@@ -323,23 +334,25 @@ class fogstore(
         client_ca        => $client_ca,
         cred_format      => $cred_format,
         cred_password    => $cred_passwords['dir'],
-        credential       => $cred_cert,
+        credential       => 'dir.p12',
         mrc_ca           => $mrc_ca,
         osd_ca           => $osd_ca,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
-        trusted          => $trusted,
+        trusted          => 'dir.jks',
         trusted_format   => $trusted_format,
         trusted_password => $dir_jks_password,
       }
       class {'::fogstore::roles::mrc':
         add_repo         => $_repository,
+        client_ca        => $client_ca,
         cred_format      => $cred_format,
         cred_password    => $cred_passwords['mrc'],
-        credential       => $cred_cert,
+        credential       => 'mrc.p12',
+        dir_ca           => $dir_ca,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
-        trusted          => $trusted,
+        trusted          => 'mrc.jks',
         trusted_format   => $trusted_format,
         trusted_password => $mrc_jks_password,
       }
@@ -354,7 +367,7 @@ class fogstore(
         dir_ca           => $dir_ca,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
-        trusted          => $trusted,
+        trusted          => 'mrc.jks',
         trusted_format   => $trusted_format,
         trusted_password => $mrc_jks_password,
       }

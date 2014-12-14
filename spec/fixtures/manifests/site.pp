@@ -52,8 +52,14 @@ node introducer {
     admin_password => 'admin-password',
     apt_key_src    => "${repo}/Release.key",
     client_ca      => 'client-ca.pem',
-    cred_cert      => 'credential.pem',
-    cred_key       => 'credential.key',
+    cred_certs     => {
+      'dir'        => 'dir-credential.pem',
+      'mrc'        => 'mrc-credential.pem',
+    },
+    cred_keys      => {
+      'dir'        => 'dir-credential.key',
+      'mrc'        => 'mrc-credential.key',
+    },
     cred_passwords =>  {
       'dir'        => 'dir-credential-password',
       'mrc'        => 'mrc-credential-password',
