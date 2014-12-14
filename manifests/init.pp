@@ -347,11 +347,14 @@ class fogstore(
     'mrc': {
       class {'::fogstore::roles::mrc':
         add_repo         => $_repository,
+        client_ca        => $client_ca,
         cred_format      => $cred_format,
         cred_password    => $cred_password,
-        object_dir       => $object_dir,
+        credential       => $cred_cert,
+        dir_ca           => $dir_ca,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
+        trusted          => $trusted,
         trusted_format   => $trusted_format,
         trusted_password => $mrc_jks_password,
       }

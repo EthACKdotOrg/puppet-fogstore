@@ -19,13 +19,11 @@ mrc_cas = [
   "file://./mrc-credential.pem",
   "file://./client-ca.pem",
   "file://./dir-ca.pem",
-  "file://./osd-ca.pem",
 ]
 osd_cas = [
   "file://./osd-credential.pem",
   "file://./client-ca.pem",
   "file://./dir-ca.pem",
-  "file://./mrc-ca.pem",
 ]
 
 describe 'fogstore::ssl::credential' do

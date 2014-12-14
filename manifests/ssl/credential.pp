@@ -80,28 +80,24 @@ define fogstore::ssl::credential(
     }
     mrc: {
       if !$client_ca or $client_ca == '' or
-          !$dir_ca or $dir_ca == '' or
-          !$osd_ca or $osd_ca == '' {
-            fail 'Need dir_ca, mrc_ca and osd_ca'
+          !$dir_ca or $dir_ca == ''  {
+            fail 'Need dir_ca and dir_ca'
       }
       $source = [
         "${ssl_source_dir}/${cred_cert}",
         "${ssl_source_dir}/${client_ca}",
         "${ssl_source_dir}/${dir_ca}",
-        "${ssl_source_dir}/${osd_ca}",
       ]
     }
     osd: {
       if !$client_ca or $client_ca == '' or
-          !$dir_ca or $dir_ca == '' or
-          !$mrc_ca or $mrc_ca == '' {
-            fail 'Need dir_ca, mrc_ca and osd_ca'
+          !$dir_ca or $dir_ca == '' {
+            fail 'Need client and dir_ca'
       }
       $source = [
         "${ssl_source_dir}/${cred_cert}",
         "${ssl_source_dir}/${client_ca}",
         "${ssl_source_dir}/${dir_ca}",
-        "${ssl_source_dir}/${mrc_ca}",
       ]
     }
     default: { fail "Unknown role ${role}"}

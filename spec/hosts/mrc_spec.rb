@@ -3,7 +3,7 @@ require 'spec_helper'
 os_facts = @os_facts
 
 
-describe 'osd' do
+describe 'mrc' do
   os_facts.each do |osfamily, facts|
     let :facts do
       facts
@@ -54,31 +54,29 @@ describe 'osd' do
         should contain_class('fogstore::ssl::trusted')
           .with('client_ca'           => 'client-ca.pem')
           .with('dir_ca'              => 'dir-ca.pem')
-          .with('mrc_ca'              => 'mrc-ca.pem')
-          .with('osd_ca'              => false)
-          .with('osd_jks_password'    => 'osd-jks')
+          .with('mrc_jks_password'    => 'mrc-jks')
           .with('ssl_source_dir'      => 'file://.')
       }
       it {
-        should contain_java_ks('osd_client_ca')
+        should contain_java_ks('mrc_client_ca')
         .with('certificate' => 'file://./client-ca.pem')
-        .with('target'      => '/etc/xos/xtreemfs/truststore/osd.jks')
-        .with('password'    => 'osd-jks')
+        .with('target'      => '/etc/xos/xtreemfs/truststore/mrc.jks')
+        .with('password'    => 'mrc-jks')
       }
       it {
-        should contain_java_ks('osd_dir_ca:/etc/xos/xtreemfs/truststore/osd.jks')
+        should contain_java_ks('mrc_dir_ca:/etc/xos/xtreemfs/truststore/mrc.jks')
         .with('certificate' => 'file://./dir-ca.pem')
-        .with('password'    => 'osd-jks')
+        .with('password'    => 'mrc-jks')
       }
     end
 
     describe 'Credentials' do
       it {
-        should contain_fogstore__ssl__credential('osd')
+        should contain_fogstore__ssl__credential('mrc')
       }
 
       it {
-        should contain_file('/etc/ssl/certs/xtreemfs-credentials-osd.pem')
+        should contain_file('/etc/ssl/certs/xtreemfs-credentials-mrc.pem')
         .with('source' => [
           "file://./credential.pem",
           "file://./client-ca.pem",
@@ -86,17 +84,17 @@ describe 'osd' do
         ])
       } 
       it {
-        should contain_openssl__export__pkcs12('xtreemfs-credentials-osd')
+        should contain_openssl__export__pkcs12('xtreemfs-credentials-mrc')
         .with('basedir'  => '/etc/ssl/certs')
-        .with('cert'     => '/etc/ssl/certs/xtreemfs-credentials-osd.pem')
+        .with('cert'     => '/etc/ssl/certs/xtreemfs-credentials-mrc.pem')
         .with('pkey'     => 'file://./credential.key')
         .with('out_pass' => 'credential-password')
       }
     end
 
-    describe 'Include fogstore::roles::osd' do
+    describe 'Include fogstore::roles::mrc' do
       it {
-        should contain_class('fogstore::roles::osd')
+        should contain_class('fogstore::roles::mrc')
       }
     end
 
@@ -105,18 +103,15 @@ describe 'osd' do
         should contain_package('xtreemfs-server')
       }
       it {
-        should contain_class('xtreemfs::internal::configure::storage')
-      }
-      it {
-        should contain_class('fogstore::roles::osd')
+        should contain_class('fogstore::roles::mrc')
           .with('add_repo'         => false)
           .with('cred_format'      => 'pkcs12')
           .with('cred_password'    => 'credential-password')
           .with('credential'       => 'credential.pem')
           .with('ssl_source_dir'   => 'file://.')
-          .with('trusted'          => 'osd.jks')
+          .with('trusted'          => 'mrc.jks')
           .with('trusted_format'   => 'jks')
-          .with('trusted_password' => 'osd-jks')
+          .with('trusted_password' => 'mrc-jks')
       }
     end
   end
