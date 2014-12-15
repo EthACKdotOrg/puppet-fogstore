@@ -210,6 +210,11 @@ class fogstore(
         if !$dir_jks_password {
           fail 'Need dir_jks_password for dir (introducer)'
         }
+
+        if $cred_certs == {} or $cred_passwords == {} or $cred_keys == {} {
+          fail 'Need cred_certs, cred_passwords and cred_keys hash!'
+        }
+
         ::fogstore::ssl::credential{'dir':
           cred_cert     => $cred_certs['dir'],
           cred_key      => $cred_keys['dir'],

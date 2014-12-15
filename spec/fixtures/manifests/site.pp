@@ -1,7 +1,7 @@
 node default { }
 
+$repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
 node client {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
     add_repo       => true,
     admin_password => 'fooBar',
@@ -26,8 +26,31 @@ node client {
   }
 }
 
+node 'client.no-adminpwd.fail' {
+  class {'::fogstore':
+    add_repo       => true,
+    apt_key_src    => "${repo}/Release.key",
+    cred_cert      => 'credential.pem',
+    cred_key       => 'credential.key',
+    cred_password  => 'credential-password',
+    dir_ca         => 'dir-ca.pem',
+    mrc_ca         => 'mrc-ca.pem',
+    osd_ca         => 'osd-ca.pem',
+    pkg_source     => $repo,
+    role           => 'client',
+    ssl_source_dir => 'file://.',
+    volumes        => {
+      'test1'      => {
+        ensure     => present,
+      },
+      'test2'      => {
+        ensure     => 'absent',
+      }
+    },
+  }
+}
+
 node dir {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
     add_repo         => true,
     admin_password   => 'admin-password',
@@ -45,24 +68,86 @@ node dir {
   }
 }
 
-node introducer {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
+node 'dir.no-osd-ca.fail' {
   class {'::fogstore':
-    add_repo       => true,
-    admin_password => 'admin-password',
-    apt_key_src    => "${repo}/Release.key",
-    client_ca      => 'client-ca.pem',
-    cred_certs     => {
-      'dir'        => 'dir-credential.pem',
-      'mrc'        => 'mrc-credential.pem',
+    add_repo         => true,
+    admin_password   => 'admin-password',
+    apt_key_src      => "${repo}/Release.key",
+    client_ca        => 'client-ca.pem',
+    cred_cert        => 'credential.pem',
+    cred_key         => 'credential.key',
+    cred_password    => 'credential-password',
+    dir_jks_password => 'dir-jks',
+    mrc_ca           => 'mrc-ca.pem',
+    osd_ca           => 'osd-ca.pem',
+    pkg_source       => $repo,
+    role             => 'dir',
+    ssl_source_dir   => 'file://.',
+  }
+}
+
+node 'dir.no-adminpwd.fail' {
+  class {'::fogstore':
+    add_repo         => true,
+    apt_key_src      => "${repo}/Release.key",
+    client_ca        => 'client-ca.pem',
+    cred_cert        => 'credential.pem',
+    cred_key         => 'credential.key',
+    cred_password    => 'credential-password',
+    dir_jks_password => 'dir-jks',
+    mrc_ca           => 'mrc-ca.pem',
+    osd_ca           => 'osd-ca.pem',
+    pkg_source       => $repo,
+    role             => 'dir',
+    ssl_source_dir   => 'file://.',
+  }
+}
+
+node introducer {
+  class {'::fogstore':
+    add_repo         => true,
+    admin_password   => 'admin-password',
+    apt_key_src      => "${repo}/Release.key",
+    client_ca        => 'client-ca.pem',
+    cred_certs       => {
+      'dir'          => 'dir-credential.pem',
+      'mrc'          => 'mrc-credential.pem',
     },
-    cred_keys      => {
-      'dir'        => 'dir-credential.key',
-      'mrc'        => 'mrc-credential.key',
+    cred_keys        => {
+      'dir'          => 'dir-credential.key',
+      'mrc'          => 'mrc-credential.key',
     },
-    cred_passwords =>  {
-      'dir'        => 'dir-credential-password',
-      'mrc'        => 'mrc-credential-password',
+    cred_passwords   =>  {
+      'dir'          => 'dir-credential-password',
+      'mrc'          => 'mrc-credential-password',
+    },
+    dir_jks_password => 'dir-jks',
+    dir_ca           => 'dir-ca.pem',
+    mrc_ca           => 'mrc-ca.pem',
+    mrc_jks_password => 'mrc-jks',
+    osd_ca           => 'osd-ca.pem',
+    pkg_source       => $repo,
+    role             => 'introducer',
+    ssl_source_dir   => 'file://.',
+  }
+}
+
+node 'introducer.no-dir-cred.fail' {
+  class {'::fogstore':
+    add_repo         => true,
+    admin_password   => 'admin-password',
+    apt_key_src      => "${repo}/Release.key",
+    client_ca        => 'client-ca.pem',
+    cred_certs       => {
+      'mrc'          => 'mrc-credential.pem',
+    },
+    cred_keys        => {
+      'dir'          => 'dir-credential.key',
+      'mrc'          => 'mrc-credential.key',
+    },
+    cred_passwords   =>  {
+      'dir'          => 'dir-credential-password',
+      'mrc'          => 'mrc-credential-password',
     },
     dir_jks_password => 'dir-jks',
     dir_ca           => 'dir-ca.pem',
@@ -76,21 +161,20 @@ node introducer {
 }
 
 node 'introducer.no-adminpwd.fail' {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
-    apt_key_src    => "${repo}/Release.key",
-    client_ca      => 'client-ca.pem',
-    cred_certs     => {
-      'dir'        => 'dir-credential.pem',
-      'mrc'        => 'mrc-credential.pem',
+    apt_key_src      => "${repo}/Release.key",
+    client_ca        => 'client-ca.pem',
+    cred_certs       => {
+      'dir'          => 'dir-credential.pem',
+      'mrc'          => 'mrc-credential.pem',
     },
-    cred_keys      => {
-      'dir'        => 'dir-credential.key',
-      'mrc'        => 'mrc-credential.key',
+    cred_keys        => {
+      'dir'          => 'dir-credential.key',
+      'mrc'          => 'mrc-credential.key',
     },
-    cred_passwords =>  {
-      'dir'        => 'dir-credential-password',
-      'mrc'        => 'mrc-credential-password',
+    cred_passwords   =>  {
+      'dir'          => 'dir-credential-password',
+      'mrc'          => 'mrc-credential-password',
     },
     dir_jks_password => 'dir-jks',
     dir_ca           => 'dir-ca.pem',
@@ -104,7 +188,6 @@ node 'introducer.no-adminpwd.fail' {
 }
 
 node mrc {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
     add_repo         => true,
     admin_password   => 'admin-password',
@@ -122,7 +205,6 @@ node mrc {
 }
 
 node 'mrc.missing-ca.fail' {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
     add_repo         => true,
     admin_password   => 'admin-password',
@@ -139,7 +221,6 @@ node 'mrc.missing-ca.fail' {
 }
 
 node osd {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
     add_repo         => true,
     apt_key_src      => "${repo}/Release.key",
@@ -157,7 +238,6 @@ node osd {
 }
 
 node 'osd.nocred.fail' {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
     add_repo         => true,
     apt_key_src      => "${repo}/Release.key",
@@ -174,7 +254,6 @@ node 'osd.nocred.fail' {
 }
 
 node 'role.unknwon.fail' {
-  $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
   class {'::fogstore':
     add_repo         => true,
     apt_key_src      => "${repo}/Release.key",
