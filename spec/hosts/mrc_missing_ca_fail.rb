@@ -10,9 +10,7 @@ describe 'mrc.missing-ca.fail' do
 
     describe 'Missing CA' do
       it {
-        expect {
-          should compile.with_all_deps
-        }.to raise_error()
+        should_not compile.with_all_deps
       }
     end
   end

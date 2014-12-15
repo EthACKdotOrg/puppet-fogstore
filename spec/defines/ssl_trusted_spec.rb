@@ -22,9 +22,7 @@ os_facts.each do |osfamily, facts|
           :ssl_source_dir   => 'file://.',
         }}
         it {
-          expect {
-            should compile.with_all_deps
-          }.to raise_error()
+          should_not compile.with_all_deps
         }
       end
 
@@ -40,9 +38,7 @@ os_facts.each do |osfamily, facts|
           :ssl_source_dir   => 'file://.',
         }}
         it {
-          expect {
-            should compile.with_all_deps
-          }.to raise_error()
+          should_not compile.with_all_deps
         }
       end
 

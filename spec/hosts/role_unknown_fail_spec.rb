@@ -10,9 +10,7 @@ describe 'role.unknwon.fail' do
 
     describe 'Unknown role' do
       it {
-        expect {
-          should compile.with_all_deps
-        }.to raise_error()
+        should_not compile.with_all_deps
       }
     end
   end

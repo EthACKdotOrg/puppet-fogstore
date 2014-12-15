@@ -10,9 +10,7 @@ describe 'introducer.no-adminpwd.fail' do
 
     describe 'Missing admin password' do
       it {
-        expect {
-          should compile.with_all_deps
-        }.to raise_error()
+        should_not compile.with_all_deps
       }
     end
   end

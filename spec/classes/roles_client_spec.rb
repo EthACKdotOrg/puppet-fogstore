@@ -25,9 +25,7 @@ os_facts.each do |osfamily, facts|
         "
       end
       it {
-        expect {
-          should compile.with_all_deps
-        }.to raise_error()
+        should_not compile.with_all_deps
       }
     end
 

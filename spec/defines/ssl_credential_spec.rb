@@ -48,9 +48,7 @@ describe 'fogstore::ssl::credential' do
         :ssl_source_dir  => 'file://.',
       }}
       it {
-        expect {
-          should compile.with_all_deps
-        }.to raise_error()
+        should_not compile.with_all_deps
       }
     end
 
@@ -62,9 +60,7 @@ describe 'fogstore::ssl::credential' do
           :client_ca => false,
         }}
         it {
-          expect {
-            should compile.with_all_deps
-          }.to raise_error()
+          should_not compile.with_all_deps
         }
         case role
         when 'dir'
@@ -72,18 +68,14 @@ describe 'fogstore::ssl::credential' do
             :client_ca => 'client-ca.pem',
           }}
           it {
-            expect {
-              should compile.with_all_deps
-            }.to raise_error()
+            should_not compile.with_all_deps
           }
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :mrc_ca    => 'mrc-ca.pem',
           }}
           it {
-            expect {
-              should compile.with_all_deps
-            }.to raise_error()
+            should_not compile.with_all_deps
           }
           let(:params) {{
             :client_ca => 'client-ca.pem',
@@ -91,45 +83,35 @@ describe 'fogstore::ssl::credential' do
             :osd_ca    => 'osd-ca.pem',
           }}
           it {
-            expect {
-              should compile.with_all_deps
-            }.to raise_error()
+            should_not compile.with_all_deps
           }
         when 'mrc'
           let(:params) {{
             :client_ca => 'client-ca.pem',
           }}
           it {
-            expect {
-              should compile.with_all_deps
-            }.to raise_error()
+            should_not compile.with_all_deps
           }
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :dir_ca    => 'dir-ca.pem',
           }}
           it {
-            expect {
-              should compile.with_all_deps
-            }.to raise_error()
+            should_not compile.with_all_deps
           }
         when 'osd'
           let(:params) {{
             :client_ca => 'client-ca.pem',
           }}
           it {
-            expect {
-              should compile.with_all_deps
-            }.to raise_error()
+            should_not compile.with_all_deps
           }
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :dir_ca    => 'dir-ca.pem',
           }}
           it {
-            expect {
-              should compile.with_all_deps
-            }.to raise_error()
+            should_not compile.with_all_deps
           }
           let(:params) {{
             :client_ca => 'client-ca.pem',
@@ -137,9 +119,7 @@ describe 'fogstore::ssl::credential' do
             :mrc_ca    => 'mrc-ca.pem',
           }}
           it {
-            expect {
-              should compile.with_all_deps
-            }.to raise_error()
+            should_not compile.with_all_deps
           }
         end
       end
