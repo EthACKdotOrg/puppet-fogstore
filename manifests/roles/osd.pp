@@ -32,7 +32,6 @@ class fogstore::roles::osd(
   $dir_port         = $fogstore::params::dir_port,
   $dir_protocol     = $fogstore::params::dir_protocol,
   $manage_jks       = $fogstore::params::manage_ssl,
-  $mrc_ca           = $fogstore::params::mrc_ca,
   $object_dir       = $fogstore::params::object_dir,
   $properties       = $fogstore::params::properties,
   $ssl_source_dir   = $fogstore::params::ssl_source_dir,
@@ -42,6 +41,13 @@ class fogstore::roles::osd(
 ) inherits fogstore::params {
 
   include ::fogstore::user
+
+  if $client_ca == '' {
+    fail 'Need client_ca for OSD role'
+  }
+  if $dir_ca == '' {
+    fail 'Need dir_ca for OSD role'
+  }
 
   # Set SSL configuration by default
   $local_properties = {
@@ -65,7 +71,6 @@ class fogstore::roles::osd(
     ::fogstore::ssl::trusted {'osd':
       client_ca        => $client_ca,
       dir_ca           => $dir_ca,
-      mrc_ca           => $mrc_ca,
       osd_jks_password => $trusted_password,
       ssl_source_dir   => $ssl_source_dir,
     }

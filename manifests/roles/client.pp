@@ -20,9 +20,8 @@ class fogstore::roles::client (
   include ::fogstore::params
   include ::fogstore::user
 
-  if !$admin_password or $admin_password == '' {
-    fail 'Need admin_password for client role'
-  }
+  validate_string($admin_password)
+  validate_slength($admin_password, 24, 5)
 
   if $manage_ssl {
     Fogstore::Ssl::Credential <||> ->

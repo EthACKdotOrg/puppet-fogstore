@@ -388,7 +388,6 @@ class fogstore(
         dir_port         => $dir_port,
         dir_protocol     => $dir_protocol,
         manage_jks       => $manage_ssl,
-        mrc_ca           => $mrc_ca,
         object_dir       => $object_dir,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
