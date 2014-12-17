@@ -1,5 +1,9 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'coveralls'
+
+require 'rspec-puppet-facts'
+include RspecPuppetFacts
+
 Coveralls.wear!
 
 RSpec.configure do |c|
@@ -30,16 +34,6 @@ RSpec.configure do |c|
   end
 end
 
-@os_facts = {
-  'Debian' => {
-    :lsbdistid              => 'Debian',
-    :lsbdistcodename        => 'jessie',
-    :operatingsystem        => 'Debian',
-    :operatingsystemrelease => '8.0',
-    :osfamily               => 'Debian',
-    :path                   => '/bin:/sbin:/usr/bin:/usr/sbin',
-  }
-}
 @trusted_roles = ['dir','introducer','mrc', 'osd']
 @srv_roles = ['dir','mrc', 'osd']
 @roles = ['client', 'dir','mrc', 'osd']
