@@ -1,17 +1,13 @@
 require 'spec_helper'
 
-os_facts = @os_facts
-
 describe 'role.unknwon.fail' do
-  os_facts.each do |osfamily, facts|
+  on_supported_os.each do |osfamily, facts|
     let :facts do
       facts
     end
 
-    describe 'Unknown role' do
-      it {
-        should_not compile.with_all_deps
-      }
+    it 'should fail' do
+      should raise_error(Puppet::Error, /unknown node role: fooBar/)
     end
   end
 end

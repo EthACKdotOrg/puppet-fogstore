@@ -1,14 +1,12 @@
 require 'spec_helper'
 
-os_facts = @os_facts
-
 describe 'fogstore::roles::dir' do
-  os_facts.each do |osfamily, facts|
+  on_supported_os.each do |os, facts|
     let :facts do
       facts
     end
 
-    context 'Simple install' do
+    context "Simple install on #{os}" do
       let(:pre_condition) do
         "class {'::fogstore::roles::dir':
           add_repo         => false,
@@ -52,7 +50,7 @@ describe 'fogstore::roles::dir' do
       }
     end
 
-    context 'Add properies' do
+    context "Add properties on #{os}" do
       let(:pre_condition) do
         "class {'::fogstore::roles::dir':
           add_repo         => false,

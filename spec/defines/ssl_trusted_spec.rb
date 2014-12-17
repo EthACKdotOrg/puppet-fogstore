@@ -1,18 +1,17 @@
 require 'spec_helper'
 
-os_facts = @os_facts
 roles = @trusted_roles
 
-os_facts.each do |osfamily, facts|
-  describe 'fogstore::ssl::trusted' do
+describe 'fogstore::ssl::trusted' do
+  on_supported_os.each do |os, facts|
+    let :facts do
+      facts
+    end
+
 
     roles.each do |role|
 
-      let :facts do
-        facts
-      end
-
-      context "#{role} without password" do
+      context "#{role} without password on #{os}" do
         let(:title) { role }
         let(:params) {{
           :client_ca        => 'client-ca.pem',
@@ -21,12 +20,19 @@ os_facts.each do |osfamily, facts|
           :osd_ca           => 'osd-ca.pem',
           :ssl_source_dir   => 'file://.',
         }}
-        it {
-          should_not compile.with_all_deps
-        }
+        case role
+        when 'introducer'
+        it 'should fail' do
+          should raise_error(Puppet::Error, /Need dir_jks_password for introducer role/i)
+        end
+        else
+        it 'should fail' do
+          should raise_error(Puppet::Error, /Need #{role}_jks_password for #{role} role/i)
+        end
+        end
       end
 
-      context "#{role} missing ca" do
+      context "#{role} missing ca on #{os}" do
         let(:title) { role }
         let(:params) {{
           :dir_ca           => 'dir-ca.pem',
@@ -37,14 +43,29 @@ os_facts.each do |osfamily, facts|
           :osd_jks_password => 'osd-jks-password',
           :ssl_source_dir   => 'file://.',
         }}
-        it {
-          should_not compile.with_all_deps
-        }
+        case role
+        when 'dir'
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Need client, mrc and osd CAs for Dir role/i)
+          end
+        when 'introducer'
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Need client, mrc and osd CAs for Introducer role/i)
+          end
+        when 'mrc'
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Need client and dir CAs for MRC role/i)
+          end
+        when 'osd'
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Need client and dir CAs for OSD role/i)
+          end
+        end
       end
 
     end
 
-    context "DIR: working" do
+    context "DIR: working on #{os}" do
       let(:title) { 'dir' }
       let(:params) {{
         :client_ca        => 'client-ca.pem',
@@ -76,7 +97,7 @@ os_facts.each do |osfamily, facts|
       }
     end
 
-    context 'Introducer: working' do
+    context "Introducer: working on #{os}" do
       let(:title) { 'introducer' }
       let(:params) {{
         :client_ca        => 'client-ca.pem',
@@ -122,7 +143,7 @@ os_facts.each do |osfamily, facts|
       }
     end
 
-    context "MRC: working" do
+    context "MRC: working on #{os}" do
       let(:title) { 'mrc' }
       let(:params) {{
         :client_ca        => 'client-ca.pem',
@@ -148,7 +169,7 @@ os_facts.each do |osfamily, facts|
       }
     end
 
-    context "OSD: working" do
+    context "OSD: working on #{os}" do
       let(:title) { 'osd' }
       let(:params) {{
         :client_ca        => 'client-ca.pem',

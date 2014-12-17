@@ -1,14 +1,12 @@
 require 'spec_helper'
 
-os_facts = @os_facts
-
-os_facts.each do |osfamily, facts|
-  describe 'fogstore::roles::client' do
+describe 'fogstore::roles::client' do
+  on_supported_os.each do |os, facts|
     let :facts do
       facts
     end
 
-    context 'Client: missing admin_password' do
+    context "missing admin_password on #{os}" do
       let :pre_condition do
         "
         class {'fogstore::roles::client':
@@ -24,12 +22,12 @@ os_facts.each do |osfamily, facts|
         }
         "
       end
-      it {
-        should_not compile.with_all_deps
-      }
+      it 'should fail' do
+        should raise_error(Puppet::Error, /validate_slength/)
+      end
     end
 
-    context 'working' do
+    context "working on #{os}" do
       let :pre_condition do
         "
         class {'fogstore::roles::client':
@@ -118,7 +116,7 @@ os_facts.each do |osfamily, facts|
       }
     end
 
-    describe 'working with repository' do
+    context "working with repository on #{os}" do
       let :pre_condition do
         "
         class {'fogstore::roles::client':
@@ -140,10 +138,18 @@ os_facts.each do |osfamily, facts|
         should contain_class('xtreemfs::settings')
         .with('add_repo' => true)
       }
+      case os
+      when 'debian-8'
       it {
         should contain_apt__source('xtreemfs')
         .with('location' => 'http://download.opensuse.org/repositories/home:/xtreemfs/Debian_8.0')
       }
+      when 'debian-7'
+      it {
+        should contain_apt__source('xtreemfs')
+        .with('location' => 'http://download.opensuse.org/repositories/home:/xtreemfs/Debian_7.0')
+      }
+      end
     end
 
   end

@@ -1,14 +1,12 @@
 require 'spec_helper'
 
-os_facts = @os_facts
-
 describe 'fogstore::roles::osd' do
-  os_facts.each do |osfamily, facts|
+  on_supported_os.each do |os, facts|
     let :facts do
       facts
     end
 
-    context 'Easy working' do
+    context "Easy working on #{os}" do
       let(:params) {{
         :add_repo         => 'false',
         :client_ca        => 'client-ca.pem',
@@ -59,7 +57,7 @@ describe 'fogstore::roles::osd' do
       }
     end
 
-    context 'Add properties' do
+    context "Add properties on #{os}" do
       let(:params) {{
         :add_repo         => 'false',
         :client_ca        => 'client-ca.pem',

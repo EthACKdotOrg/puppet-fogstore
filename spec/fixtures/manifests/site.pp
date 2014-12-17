@@ -79,7 +79,6 @@ node 'dir.no-osd-ca.fail' {
     cred_password    => 'credential-password',
     dir_jks_password => 'dir-jks',
     mrc_ca           => 'mrc-ca.pem',
-    osd_ca           => 'osd-ca.pem',
     pkg_source       => $repo,
     role             => 'dir',
     ssl_source_dir   => 'file://.',

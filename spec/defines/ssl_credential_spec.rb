@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-os_facts = @os_facts
 roles = @roles
 
 client_cas = [
@@ -27,14 +26,14 @@ osd_cas = [
 ]
 
 describe 'fogstore::ssl::credential' do
-  os_facts.each do |osfamily, facts|
+  on_supported_os.each do |os, facts|
 
     let :facts do
       facts
     end
     let(:path) { '/bin:/sbin:/usr/bin:/usr/sbin' }
 
-    describe 'Unknown role' do
+    context "Unknown role on #{os}" do
       let(:title) { 'failure' }
       let(:params) {{
         :client_ca       => 'client-ca.pem',
@@ -47,84 +46,78 @@ describe 'fogstore::ssl::credential' do
         :osd_ca          => 'osd-ca.pem',
         :ssl_source_dir  => 'file://.',
       }}
-      it {
-        should_not compile.with_all_deps
-      }
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Unknown role/)
+      end
     end
 
     roles.each do |role|
 
-      context "Role: #{role} (failures)" do
+      context "Role: #{role} (failures) on #{os}" do
         let(:title) { role }
-        let(:params) {{
-          :client_ca => false,
-        }}
-        it {
-          should_not compile.with_all_deps
-        }
         case role
         when 'dir'
           let(:params) {{
             :client_ca => 'client-ca.pem',
           }}
-          it {
-            should_not compile.with_all_deps
-          }
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Undefined variable/)
+          end
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :mrc_ca    => 'mrc-ca.pem',
           }}
-          it {
-            should_not compile.with_all_deps
-          }
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Undefined variable/)
+          end
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :mrc_ca    => 'mrc-ca.pem',
             :osd_ca    => 'osd-ca.pem',
           }}
-          it {
-            should_not compile.with_all_deps
-          }
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Undefined variable/)
+          end
         when 'mrc'
           let(:params) {{
             :client_ca => 'client-ca.pem',
           }}
-          it {
-            should_not compile.with_all_deps
-          }
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Undefined variable/)
+          end
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :dir_ca    => 'dir-ca.pem',
           }}
-          it {
-            should_not compile.with_all_deps
-          }
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Undefined variable/)
+          end
         when 'osd'
           let(:params) {{
             :client_ca => 'client-ca.pem',
           }}
-          it {
-            should_not compile.with_all_deps
-          }
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Undefined variable/)
+          end
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :dir_ca    => 'dir-ca.pem',
           }}
-          it {
-            should_not compile.with_all_deps
-          }
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Undefined variable/)
+          end
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :dir_ca    => 'dir-ca.pem',
             :mrc_ca    => 'mrc-ca.pem',
           }}
-          it {
-            should_not compile.with_all_deps
-          }
+          it 'should fail' do
+            should raise_error(Puppet::Error, /Undefined variable/)
+          end
         end
       end
 
-      context "Role: #{role} (working)" do
+      context "Role: #{role} (working) on #{os}" do
         let(:title) { role }
         let(:params) {{
           :client_ca       => 'client-ca.pem',

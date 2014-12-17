@@ -1,17 +1,13 @@
 require 'spec_helper'
 
-os_facts = @os_facts
-
 describe 'introducer.no-dir-cred.fail' do
-  os_facts.each do |osfamily, facts|
+  on_supported_os.each do |osfamily, facts|
     let :facts do
       facts
     end
 
-    describe 'No dir credential' do
-      it {
-        should_not compile.with_all_deps
-      }
+    it 'should fail' do
+      should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
     end
   end
 end
