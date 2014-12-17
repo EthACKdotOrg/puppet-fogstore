@@ -29,7 +29,7 @@ os_facts.each do |osfamily, facts|
       }
     end
 
-    describe 'working' do
+    context 'working' do
       let :pre_condition do
         "
         class {'fogstore::roles::client':
