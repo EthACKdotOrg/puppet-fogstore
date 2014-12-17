@@ -44,7 +44,7 @@ describe 'osd' do
       should contain_fogstore__ssl__trusted('osd')
         .with('client_ca'        => 'client-ca.pem')
         .with('dir_ca'           => 'dir-ca.pem')
-        .with('mrc_ca'           => 'mrc-ca.pem')
+        .with('mrc_ca'           => false)
         .with('osd_ca'           => false)
         .with('osd_jks_password' => 'osd-jks')
         .with('ssl_source_dir'   => 'file://.')
