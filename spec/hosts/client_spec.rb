@@ -14,6 +14,9 @@ describe 'client' do
     end
 
     describe 'Dependencies' do
+      it {
+        should contain_class('xtreemfs::settings')
+      }
     end
 
     describe 'Configure APT' do
