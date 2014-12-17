@@ -301,7 +301,6 @@ class fogstore(
       class {'::fogstore::roles::client':
         add_repo       => $_repository,
         admin_password => $admin_password,
-        client_ca      => $client_ca,
         credential     => $cred_cert,
         cred_key       => $cred_key,
         cred_password  => $cred_password,

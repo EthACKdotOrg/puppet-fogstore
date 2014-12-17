@@ -2,7 +2,6 @@
 class fogstore::roles::client (
   $add_repo        = $fogstore::params::add_repo,
   $admin_password  = $fogstore::params::admin_password,
-  $client_ca       = $fogstore::params::client_ca,
   $credential      = $fogstore::params::cred_cert,
   $cred_key        = $fogstore::params::cred_key,
   $cred_password   = $fogstore::params::cred_password,
@@ -31,7 +30,6 @@ class fogstore::roles::client (
     Xtreemfs::Mount <||>
 
     ::fogstore::ssl::credential {'client':
-      client_ca       => $client_ca,
       cred_cert       => $credential,
       cred_key        => $cred_key,
       cred_password   => $cred_password,
