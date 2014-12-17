@@ -15,6 +15,7 @@
     }
   ],
   "dependencies": [
+    { "name": "puppetlabs/apt" },
     { "name": "puppetlabs/stdlib" } ,
     { "name": "wavesoftware/xtreemfs" },
     { "name": "camptocamp/openssl" },
