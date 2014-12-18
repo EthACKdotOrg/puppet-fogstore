@@ -7,6 +7,7 @@
 #
 class fogstore::roles::dir(
   $add_repo         = $fogstore::params::add_repo,
+  $admin_password   = $fogstore::params::admin_password,
   $client_ca        = $fogstore::params::client_ca,
   $cred_format      = $fogstore::params::cred_format,
   $cred_password    = $fogstore::params::cred_password,
@@ -23,8 +24,13 @@ class fogstore::roles::dir(
 
   include ::fogstore::user
 
+  validate_string($admin_password)
+  validate_slength($admin_password, 64, 12)
+
   # Set SSL configuration by default
   $local_properties = {
+    'admin_password' =>
+      $admin_password,
     'ssl.enabled' =>
       true,
     'ssl.service_creds' =>
