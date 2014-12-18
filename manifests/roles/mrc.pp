@@ -7,6 +7,7 @@
 #
 class fogstore::roles::mrc(
   $add_repo         = $fogstore::params::add_repo,
+  $admin_password   = $fogstore::params::admin_password,
   $client_ca        = $fogstore::params::client_ca,
   $cred_format      = $fogstore::params::cred_format,
   $cred_password    = $fogstore::params::cred_password,
@@ -23,6 +24,8 @@ class fogstore::roles::mrc(
   $trusted_password = $fogstore::params::dir_jks_password,
 ) inherits fogstore::params {
 
+  validate_string($admin_password)
+  validate_slength($admin_password, 64, 12)
   validate_bool($add_repo)
 
 
@@ -46,6 +49,7 @@ class fogstore::roles::mrc(
       $trusted_password,
     'authentication_provider' =>
       'org.xtreemfs.common.auth.SimpleX509AuthProvider',
+    'admin_password' => $admin_password,
   }
 
   if ($manage_jks) {

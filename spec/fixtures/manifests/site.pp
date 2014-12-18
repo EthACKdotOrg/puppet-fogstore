@@ -190,6 +190,7 @@ node 'introducer.no-adminpwd.fail' {
 node mrc {
   class {'::fogstore':
     add_repo         => true,
+    admin_password   => $password,
     apt_key_src      => "${repo}/Release.key",
     client_ca        => 'client-ca.pem',
     cred_cert        => 'credential.pem',
@@ -206,6 +207,7 @@ node mrc {
 node 'mrc.missing-ca.fail' {
   class {'::fogstore':
     add_repo         => true,
+    admin_password   => $password,
     apt_key_src      => "${repo}/Release.key",
     cred_cert        => 'credential.pem',
     cred_key         => 'credential.key',

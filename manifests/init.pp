@@ -354,6 +354,7 @@ class fogstore(
       }
       class {'::fogstore::roles::mrc':
         add_repo         => $_repository,
+        admin_password   => $admin_password,
         client_ca        => $client_ca,
         cred_format      => $cred_format,
         cred_password    => $cred_passwords['mrc'],
@@ -369,6 +370,7 @@ class fogstore(
     'mrc': {
       class {'::fogstore::roles::mrc':
         add_repo         => $_repository,
+        admin_password   => $admin_password,
         client_ca        => $client_ca,
         cred_format      => $cred_format,
         cred_password    => $cred_password,
