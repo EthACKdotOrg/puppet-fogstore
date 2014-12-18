@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+good_password = 'eic1diB5zosu'
+
 describe 'fogstore::roles::client' do
   on_supported_os.each do |os, facts|
     let :facts do
@@ -27,12 +29,56 @@ describe 'fogstore::roles::client' do
       end
     end
 
-    context "working on #{os}" do
+    context "short admin_password on #{os}" do
       let :pre_condition do
         "
         class {'fogstore::roles::client':
           add_repo        => false,
           admin_password  => 'foobarbaz',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /validate_slength/)
+      end
+    end
+
+    context "long admin_password on #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => 'taeBafee8oov7eish6yiihakaexeu1eechuch6eighuam4Ib2ohxei0haifuTob2u',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /validate_slength/)
+      end
+    end
+
+    context "working on #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => '#{good_password}',
           credential      => 'credential.pem',
           cred_password   => 'abcdefg',
           cred_key        => 'credential.key',
@@ -97,7 +143,7 @@ describe 'fogstore::roles::client' do
         .with('dir_port'      => nil)
         .with('dir_protocol'  => nil)
         .with('options'       => {
-          'admin_password'    => 'foobarbaz',
+          'admin_password'    => good_password,
           'pkcs12-file-path'  => '/etc/ssl/certs/client.p12',
           'pkcs12-passphrase' => 'abcdefg',
         })
@@ -109,7 +155,7 @@ describe 'fogstore::roles::client' do
         .with('dir_port'      => nil)
         .with('dir_protocol'  => nil)
         .with('options'       => {
-          'admin_password'    => 'foobarbaz',
+          'admin_password'    => good_password,
           'pkcs12-file-path'  => '/etc/ssl/certs/client.p12',
           'pkcs12-passphrase' => 'abcdefg',
         })
@@ -121,7 +167,7 @@ describe 'fogstore::roles::client' do
         "
         class {'fogstore::roles::client':
           add_repo        => true,
-          admin_password  => 'foobarbaz',
+          admin_password  => '#{good_password}',
           credential      => 'credential.pem',
           cred_password   => 'abcdefg',
           cred_key        => 'credential.key',
