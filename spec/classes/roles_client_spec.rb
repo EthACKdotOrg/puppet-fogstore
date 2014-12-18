@@ -73,6 +73,28 @@ describe 'fogstore::roles::client' do
       end
     end
 
+    context "add_repo not a bool on #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => 'blah',
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /"blah" is not a boolean.  It looks to be a String/i)
+      end
+    end
+
     context "working on #{os}" do
       let :pre_condition do
         "

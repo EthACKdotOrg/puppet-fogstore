@@ -6,6 +6,26 @@ describe 'fogstore::roles::mrc' do
       facts
     end
 
+    context "add_repo not a bool on #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::mrc':
+          add_repo        => 'blah',
+          client_ca        => 'client-ca.pem',
+          cred_password    => 'credential-password',
+          credential       => 'mrc.p12',
+          dir_ca           => 'dir-ca.pem',
+          ssl_source_dir   => 'file://.',
+          trusted          => 'mrc.jks',
+          trusted_password => 'mrc-jks-password',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /"blah" is not a boolean.  It looks to be a String/i)
+      end
+    end
+
     context "Easy working on #{os}" do
       let(:params) {{
         :add_repo         => false,

@@ -23,6 +23,9 @@ class fogstore::roles::mrc(
   $trusted_password = $fogstore::params::dir_jks_password,
 ) inherits fogstore::params {
 
+  validate_bool($add_repo)
+
+
   include ::fogstore::user
 
   # Set SSL configuration by default

@@ -22,6 +22,7 @@ class fogstore::roles::client (
 
   validate_string($admin_password)
   validate_slength($admin_password, 64, 12)
+  validate_bool($add_repo)
 
   if $manage_ssl {
     Fogstore::Ssl::Credential <||> ->

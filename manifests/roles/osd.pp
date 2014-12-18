@@ -40,6 +40,8 @@ class fogstore::roles::osd(
   $trusted_password = $fogstore::params::osd_jks_password,
 ) inherits fogstore::params {
 
+  validate_bool($add_repo)
+
   include ::fogstore::user
 
   if $client_ca == '' {

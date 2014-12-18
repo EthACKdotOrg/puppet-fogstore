@@ -145,6 +145,9 @@ class fogstore(
   $volumes             = $fogstore::params::volumes,
 ) inherits fogstore::params {
 
+  validate_bool($add_repo)
+
+
   if $role !~ /client|dir|introducer|mrc|osd/ {
     fail "Fogstore: unknown node role: ${role}"
   }
@@ -319,6 +322,7 @@ class fogstore(
     'dir': {
       class {'::fogstore::roles::dir':
         add_repo         => $_repository,
+        admin_password   => $admin_password,
         client_ca        => $client_ca,
         cred_format      => $cred_format,
         cred_password    => $cred_password,
@@ -335,6 +339,7 @@ class fogstore(
     'introducer': {
       class {'::fogstore::roles::dir':
         add_repo         => $_repository,
+        admin_password   => $admin_password,
         client_ca        => $client_ca,
         cred_format      => $cred_format,
         cred_password    => $cred_passwords['dir'],

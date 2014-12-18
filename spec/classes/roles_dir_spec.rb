@@ -76,6 +76,29 @@ describe 'fogstore::roles::dir' do
       end
     end
 
+    context "add_repo not a bool on #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::dir':
+          add_repo        => 'blah',
+          admin_password  => '#{good_password}',
+          client_ca        => 'client-ca.pem',
+          cred_password    => 'credential-password',
+          credential       => 'dir.p12',
+          mrc_ca           => 'mrc-ca.pem',
+          osd_ca           => 'osd-ca.pem',
+          properties       => {},
+          ssl_source_dir   => 'file://.',
+          trusted          => 'dir.jks',
+          trusted_password => 'dir-jks-password',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /"blah" is not a boolean.  It looks to be a String/i)
+      end
+    end
+
     context "Simple install on #{os}" do
       let(:pre_condition) do
         "class {'::fogstore::roles::dir':

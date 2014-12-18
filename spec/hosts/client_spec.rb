@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+password = 'eiTh8fehahCha'
+
 describe 'client' do
   on_supported_os.each do |os, facts|
     let :facts do
@@ -61,7 +63,7 @@ describe 'client' do
       .with('dir_port'      => nil)
       .with('dir_protocol'  => nil)
       .with('options'       => {
-        'admin_password'    => 'fooBar',
+        'admin_password'    => password,
         'pkcs12-file-path'  => '/etc/ssl/certs/client.p12',
         'pkcs12-passphrase' => 'credential-password',
       })
@@ -73,7 +75,7 @@ describe 'client' do
       .with('dir_port'      => nil)
       .with('dir_protocol'  => nil)
       .with('options'       => {
-        'admin_password'    => 'fooBar',
+        'admin_password'    => password,
         'pkcs12-file-path'  => '/etc/ssl/certs/client.p12',
         'pkcs12-passphrase' => 'credential-password',
       })

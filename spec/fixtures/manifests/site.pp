@@ -1,10 +1,11 @@
 node default { }
 
 $repo = 'http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_14.10/'
+$password = 'eiTh8fehahCha'
 node client {
   class {'::fogstore':
     add_repo       => true,
-    admin_password => 'fooBar',
+    admin_password => $password,
     apt_key_src    => "${repo}/Release.key",
     cred_cert      => 'credential.pem',
     cred_key       => 'credential.key',
@@ -53,7 +54,7 @@ node 'client.no-adminpwd.fail' {
 node dir {
   class {'::fogstore':
     add_repo         => true,
-    admin_password   => 'admin-password',
+    admin_password   => $password,
     apt_key_src      => "${repo}/Release.key",
     client_ca        => 'client-ca.pem',
     cred_cert        => 'credential.pem',
@@ -71,7 +72,7 @@ node dir {
 node 'dir.no-osd-ca.fail' {
   class {'::fogstore':
     add_repo         => true,
-    admin_password   => 'admin-password',
+    admin_password   => $password,
     apt_key_src      => "${repo}/Release.key",
     client_ca        => 'client-ca.pem',
     cred_cert        => 'credential.pem',
@@ -105,7 +106,7 @@ node 'dir.no-adminpwd.fail' {
 node introducer {
   class {'::fogstore':
     add_repo         => true,
-    admin_password   => 'admin-password',
+    admin_password   => $password,
     apt_key_src      => "${repo}/Release.key",
     client_ca        => 'client-ca.pem',
     cred_certs       => {
@@ -134,7 +135,7 @@ node introducer {
 node 'introducer.no-dir-cred.fail' {
   class {'::fogstore':
     add_repo         => true,
-    admin_password   => 'admin-password',
+    admin_password   => $password,
     apt_key_src      => "${repo}/Release.key",
     client_ca        => 'client-ca.pem',
     cred_certs       => {
@@ -189,7 +190,6 @@ node 'introducer.no-adminpwd.fail' {
 node mrc {
   class {'::fogstore':
     add_repo         => true,
-    admin_password   => 'admin-password',
     apt_key_src      => "${repo}/Release.key",
     client_ca        => 'client-ca.pem',
     cred_cert        => 'credential.pem',
@@ -206,7 +206,6 @@ node mrc {
 node 'mrc.missing-ca.fail' {
   class {'::fogstore':
     add_repo         => true,
-    admin_password   => 'admin-password',
     apt_key_src      => "${repo}/Release.key",
     cred_cert        => 'credential.pem',
     cred_key         => 'credential.key',

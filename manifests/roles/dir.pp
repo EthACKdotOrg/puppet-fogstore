@@ -26,6 +26,7 @@ class fogstore::roles::dir(
 
   validate_string($admin_password)
   validate_slength($admin_password, 64, 12)
+  validate_bool($add_repo)
 
   # Set SSL configuration by default
   $local_properties = {
