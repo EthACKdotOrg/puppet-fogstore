@@ -23,6 +23,14 @@ class fogstore::roles::client (
   validate_string($admin_password)
   validate_slength($admin_password, 64, 12)
   validate_bool($add_repo)
+  validate_bool($manage_ssl)
+
+  if !is_hash($volumes) {
+    fail 'Volumes need to ba a hash'
+  }
+  if !is_hash($mounts) {
+    fail 'Mounts need to ba a hash'
+  }
 
   if $manage_ssl {
     Fogstore::Ssl::Credential <||> ->

@@ -95,6 +95,200 @@ describe 'fogstore::roles::client' do
       end
     end
 
+    context "manage_ssl not a bool on #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => 'blah',
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /"blah" is not a boolean.  It looks to be a String/i)
+      end
+    end
+
+    context "missing credential #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => '#{good_password}',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/i)
+      end
+    end
+
+    context "missing credential password #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/i)
+      end
+    end
+
+    context "missing credential key #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/i)
+      end
+    end
+
+    context "missing dir_ca #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => true,
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Need dir_ca, mrc_ca and osd_ca/i)
+      end
+    end
+
+    context "missing mrc_ca #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => true,
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Need dir_ca, mrc_ca and osd_ca/i)
+      end
+    end
+
+    context "missing osd_ca #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => true,
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Need dir_ca, mrc_ca and osd_ca/i)
+      end
+    end
+
+    context "working on #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          mounts          => 'foo',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Mounts need to ba a hash/i)
+      end
+    end
+
+    context "volumes not a hash #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => '#{good_password}',
+          credential      => 'credential.pem',
+          cred_password   => 'abcdefg',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+          volumes         => 'foo',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /Volumes need to ba a hash/i)
+      end
+    end
+
     context "working on #{os}" do
       let :pre_condition do
         "
