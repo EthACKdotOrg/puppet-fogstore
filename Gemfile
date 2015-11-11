@@ -1,6 +1,7 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :development, :unit_tests do
+  gem 'coveralls',                                         :require => false
   gem 'rake',                                              :require => false
   gem 'rspec', '< 3.2',                                    :require => false if RUBY_VERSION =~ /^1.8/
   gem 'rspec-puppet',                                      :require => false

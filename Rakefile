@@ -1,27 +1,23 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 
-exclude_paths = [
-  "pkg/**/*",
-  "vendor/**/*",
-  ".vendor/**/*",
-  "spec/**/*",
-]
-PuppetLint.configuration.ignore_paths = exclude_paths
-PuppetSyntax.exclude_paths = exclude_paths
-
-PuppetLint.configuration.fail_on_warnings
-PuppetLint.configuration.send('disable_80chars')
-
-task :metadata do
-  sh "metadata-json-lint metadata.json"
+Rake::Task[:lint].clear
+PuppetLint::RakeTask.new :lint do |config|
+  config.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp", "vendor/**/*.pp"]
+  config.disable_checks = ['80chars']
+  config.fail_on_warnings = true
 end
 
-desc "Run syntax, lint, and spec tests."
-task :test => [
-  :metadata,
-  :syntax,
-  :lint,
-  :spec_prep,
-  :spec_standalone,
-]
+PuppetSyntax.exclude_paths = ["spec/fixtures/**/*.pp", "vendor/**/*"]
+
+# Publishing tasks
+unless RUBY_VERSION =~ /^1\.8/
+  require 'puppet_blacksmith'
+  require 'puppet_blacksmith/rake_tasks'
+  require 'github_changelog_generator/task'
+  GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+    m = Blacksmith::Modulefile.new
+    config.future_release = m.version
+    config.release_url = "https://forge.puppetlabs.com/#{m.author}/#{m.name}/%s"
+  end
+end
