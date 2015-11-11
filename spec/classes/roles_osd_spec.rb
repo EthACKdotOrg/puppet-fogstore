@@ -18,7 +18,7 @@ describe 'fogstore::roles::osd' do
           object_dir       => '/mnt/xtreemfs',
           properties       => {},
           ssl_source_dir   => 'file://.',
-          trusted          => 'osd.jks',
+          trust_store      => 'osd.jks',
           trusted_format   => 'jks',
           trusted_password => 'fooBar',
         }
@@ -39,7 +39,7 @@ describe 'fogstore::roles::osd' do
         :object_dir       => '/mnt/xtreemfs',
         :properties       => {},
         :ssl_source_dir   => 'file://.',
-        :trusted          => 'osd.jks',
+        :trust_store      => 'osd.jks',
         :trusted_format   => 'jks',
         :trusted_password => 'fooBar',
       }}
@@ -93,7 +93,7 @@ describe 'fogstore::roles::osd' do
           'checksums.algorithm' => 'Adler32',
         },
         :ssl_source_dir   => 'file://.',
-        :trusted          => 'osd.jks',
+        :trust_store      => 'osd.jks',
         :trusted_format   => 'jks',
         :trusted_password => 'fooBar',
       }}

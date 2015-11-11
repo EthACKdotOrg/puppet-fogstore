@@ -61,14 +61,14 @@ describe 'fogstore::ssl::credential' do
             :client_ca => 'client-ca.pem',
           }}
           it 'should fail' do
-            should raise_error(Puppet::Error, /Undefined variable/)
+            should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
           end
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :mrc_ca    => 'mrc-ca.pem',
           }}
           it 'should fail' do
-            should raise_error(Puppet::Error, /Undefined variable/)
+            should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
           end
           let(:params) {{
             :client_ca => 'client-ca.pem',
@@ -76,35 +76,35 @@ describe 'fogstore::ssl::credential' do
             :osd_ca    => 'osd-ca.pem',
           }}
           it 'should fail' do
-            should raise_error(Puppet::Error, /Undefined variable/)
+            should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
           end
         when 'mrc'
           let(:params) {{
             :client_ca => 'client-ca.pem',
           }}
           it 'should fail' do
-            should raise_error(Puppet::Error, /Undefined variable/)
+            should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
           end
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :dir_ca    => 'dir-ca.pem',
           }}
           it 'should fail' do
-            should raise_error(Puppet::Error, /Undefined variable/)
+            should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
           end
         when 'osd'
           let(:params) {{
             :client_ca => 'client-ca.pem',
           }}
           it 'should fail' do
-            should raise_error(Puppet::Error, /Undefined variable/)
+            should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
           end
           let(:params) {{
             :client_ca => 'client-ca.pem',
             :dir_ca    => 'dir-ca.pem',
           }}
           it 'should fail' do
-            should raise_error(Puppet::Error, /Undefined variable/)
+            should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
           end
           let(:params) {{
             :client_ca => 'client-ca.pem',
@@ -112,7 +112,7 @@ describe 'fogstore::ssl::credential' do
             :mrc_ca    => 'mrc-ca.pem',
           }}
           it 'should fail' do
-            should raise_error(Puppet::Error, /Undefined variable/)
+            should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/)
           end
         end
       end

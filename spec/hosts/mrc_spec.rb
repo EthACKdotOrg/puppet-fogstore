@@ -93,7 +93,7 @@ describe 'mrc' do
         .with('cred_password'    => 'credential-password')
         .with('credential'       => 'credential.pem')
         .with('ssl_source_dir'   => 'file://.')
-        .with('trusted'          => 'mrc.jks')
+        .with('trust_store'      => 'mrc.jks')
         .with('trusted_format'   => 'jks')
         .with('trusted_password' => 'mrc-jks')
     }

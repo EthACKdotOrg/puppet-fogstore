@@ -59,9 +59,8 @@ describe 'client' do
     it {
       should contain_xtreemfs__volume('test1')
       .with('ensure'        => 'present')
-      .with('dir_host'      => nil)
-      .with('dir_port'      => nil)
-      .with('dir_protocol'  => nil)
+      .with('dir_host'      => 'localhost')
+      .with('dir_protocol'  => 'pbrpcs')
       .with('options'       => {
         'admin_password'    => password,
         'pkcs12-file-path'  => '/etc/ssl/certs/client.p12',
@@ -71,9 +70,8 @@ describe 'client' do
     it {
       should contain_xtreemfs__volume('test2')
       .with('ensure'        => 'absent')
-      .with('dir_host'      => nil)
-      .with('dir_port'      => nil)
-      .with('dir_protocol'  => nil)
+      .with('dir_host'      => 'localhost')
+      .with('dir_protocol'  => 'pbrpcs')
       .with('options'       => {
         'admin_password'    => password,
         'pkcs12-file-path'  => '/etc/ssl/certs/client.p12',

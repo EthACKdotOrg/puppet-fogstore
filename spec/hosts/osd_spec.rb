@@ -98,7 +98,7 @@ describe 'osd' do
         .with('cred_password'    => 'credential-password')
         .with('credential'       => 'credential.pem')
         .with('ssl_source_dir'   => 'file://.')
-        .with('trusted'          => 'osd.jks')
+        .with('trust_store'      => 'osd.jks')
         .with('trusted_format'   => 'jks')
         .with('trusted_password' => 'osd-jks')
     }

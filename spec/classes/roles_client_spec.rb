@@ -1,11 +1,34 @@
 require 'spec_helper'
 
 good_password = 'eic1diB5zosu'
+good_password2 = 'Iesh2ohC8aeK3aec9Hou'
 
 describe 'fogstore::roles::client' do
   on_supported_os.each do |os, facts|
     let :facts do
       facts
+    end
+
+    context "admin_password not a string on #{os}" do
+      let :pre_condition do
+        "
+        class {'fogstore::roles::client':
+          add_repo        => false,
+          admin_password  => false,
+          credential      => 'credential.pem',
+          cred_password   => '#{good_password2}',
+          cred_key        => 'credential.key',
+          dir_ca          => 'dir-ca.pem',
+          manage_ssl      => true,
+          mrc_ca          => 'mrc-ca.pem',
+          osd_ca          => 'osd-ca.pem',
+          ssl_source_dir  => 'file://.',
+        }
+        "
+      end
+      it 'should fail' do
+        should raise_error(Puppet::Error, /false is not a string.  It looks to be a FalseClass/i)
+      end
     end
 
     context "missing admin_password on #{os}" do
@@ -14,7 +37,7 @@ describe 'fogstore::roles::client' do
         class {'fogstore::roles::client':
           add_repo        => false,
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -36,7 +59,7 @@ describe 'fogstore::roles::client' do
           add_repo        => false,
           admin_password  => 'foobarbaz',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -58,7 +81,7 @@ describe 'fogstore::roles::client' do
           add_repo        => false,
           admin_password  => 'taeBafee8oov7eish6yiihakaexeu1eechuch6eighuam4Ib2ohxei0haifuTob2u',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -80,7 +103,7 @@ describe 'fogstore::roles::client' do
           add_repo        => 'blah',
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -102,7 +125,7 @@ describe 'fogstore::roles::client' do
           add_repo        => false,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => 'blah',
@@ -123,7 +146,7 @@ describe 'fogstore::roles::client' do
         class {'fogstore::roles::client':
           add_repo        => false,
           admin_password  => '#{good_password}',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -134,7 +157,7 @@ describe 'fogstore::roles::client' do
         "
       end
       it 'should fail' do
-        should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/i)
+        should raise_error(Puppet::Error, /Credential seems to be an empty string/i)
       end
     end
 
@@ -155,7 +178,7 @@ describe 'fogstore::roles::client' do
         "
       end
       it 'should fail' do
-        should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/i)
+        should raise_error(Puppet::Error, /validate_slength()/i)
       end
     end
 
@@ -166,7 +189,7 @@ describe 'fogstore::roles::client' do
           add_repo        => false,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
           mrc_ca          => 'mrc-ca.pem',
@@ -176,7 +199,7 @@ describe 'fogstore::roles::client' do
         "
       end
       it 'should fail' do
-        should raise_error(Puppet::Error, /Need cred_cert, cred_key and cred_password/i)
+        should raise_error(Puppet::Error, /Cred_key seems to be an empty string/i)
       end
     end
 
@@ -187,7 +210,7 @@ describe 'fogstore::roles::client' do
           add_repo        => true,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           manage_ssl      => true,
           mrc_ca          => 'mrc-ca.pem',
@@ -208,7 +231,7 @@ describe 'fogstore::roles::client' do
           add_repo        => true,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -229,7 +252,7 @@ describe 'fogstore::roles::client' do
           add_repo        => true,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -250,7 +273,7 @@ describe 'fogstore::roles::client' do
           add_repo        => false,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -273,7 +296,7 @@ describe 'fogstore::roles::client' do
           add_repo        => false,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -296,7 +319,7 @@ describe 'fogstore::roles::client' do
           add_repo        => false,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,
@@ -337,10 +360,10 @@ describe 'fogstore::roles::client' do
 
       it {
         should contain_fogstore__ssl__credential('client')
-        .with('client_ca'       => false)
+        .with('client_ca'       => '')
         .with('cred_cert'       => 'credential.pem')
         .with('cred_key'        => 'credential.key')
-        .with('cred_password'   => 'abcdefg')
+        .with('cred_password'   => good_password2)
         .with('destination_dir' => '/etc/ssl/certs')
         .with('dir_ca'          => 'dir-ca.pem')
         .with('mrc_ca'          => 'mrc-ca.pem')
@@ -355,25 +378,23 @@ describe 'fogstore::roles::client' do
       it {
         should contain_xtreemfs__volume('test1')
         .with('ensure'        => 'present')
-        .with('dir_host'      => nil)
-        .with('dir_port'      => nil)
-        .with('dir_protocol'  => nil)
+        .with('dir_host'      => 'localhost')
+        .with('dir_protocol'  => 'pbrpcs')
         .with('options'       => {
           'admin_password'    => good_password,
           'pkcs12-file-path'  => '/etc/ssl/certs/client.p12',
-          'pkcs12-passphrase' => 'abcdefg',
+          'pkcs12-passphrase' => good_password2,
         })
       }
       it {
         should contain_xtreemfs__volume('test2')
         .with('ensure'        => 'absent')
-        .with('dir_host'      => nil)
-        .with('dir_port'      => nil)
-        .with('dir_protocol'  => nil)
+        .with('dir_host'      => 'localhost')
+        .with('dir_protocol'  => 'pbrpcs')
         .with('options'       => {
           'admin_password'    => good_password,
           'pkcs12-file-path'  => '/etc/ssl/certs/client.p12',
-          'pkcs12-passphrase' => 'abcdefg',
+          'pkcs12-passphrase' => good_password2,
         })
       }
     end
@@ -385,7 +406,7 @@ describe 'fogstore::roles::client' do
           add_repo        => true,
           admin_password  => '#{good_password}',
           credential      => 'credential.pem',
-          cred_password   => 'abcdefg',
+          cred_password   => '#{good_password2}',
           cred_key        => 'credential.key',
           dir_ca          => 'dir-ca.pem',
           manage_ssl      => true,

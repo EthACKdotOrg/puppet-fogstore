@@ -7,7 +7,7 @@ describe 'mrc.missing-ca.fail' do
     end
 
     it 'should fail' do
-      should raise_error(Puppet::Error, /Needs client and dir CAs for mrc/)
+      should raise_error(Puppet::Error, /Need dir_ca and dir_ca/)
     end
   end
 end

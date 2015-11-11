@@ -141,7 +141,7 @@ class fogstore(
   $repos               = $fogstore::params::repos,
   $pkg_source          = $fogstore::params::pkg_source,
   $trusted_format      = $fogstore::params::trusted_format,
-  $trusted             = "${role}.jks",
+  $trust_store         = "${role}.jks",
   $volumes             = $fogstore::params::volumes,
 ) inherits fogstore::params {
 
@@ -271,9 +271,12 @@ class fogstore(
   include ::xtreemfs::internal::workflow
 
   class {'::apt':
-    purge_sources_list   => true,
-    purge_sources_list_d => true,
-    purge_preferences_d  => true,
+    purge => {
+      'sources.list'   => true,
+      'sources.list.d' => true,
+      'preferences'    => true,
+      'preferences.d'  => true,
+    },
   }
   ::apt::conf {'ignore-suggests':
     content => 'APT::Install-Suggests "0";',
@@ -331,7 +334,7 @@ class fogstore(
         osd_ca           => $osd_ca,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
-        trusted          => $trusted,
+        trust_store      => $trust_store,
         trusted_format   => $trusted_format,
         trusted_password => $dir_jks_password,
       }
@@ -348,7 +351,7 @@ class fogstore(
         osd_ca           => $osd_ca,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
-        trusted          => 'dir.jks',
+        trust_store      => 'dir.jks',
         trusted_format   => $trusted_format,
         trusted_password => $dir_jks_password,
       }
@@ -362,7 +365,7 @@ class fogstore(
         dir_ca           => $dir_ca,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
-        trusted          => 'mrc.jks',
+        trust_store      => 'mrc.jks',
         trusted_format   => $trusted_format,
         trusted_password => $mrc_jks_password,
       }
@@ -378,7 +381,7 @@ class fogstore(
         dir_ca           => $dir_ca,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
-        trusted          => 'mrc.jks',
+        trust_store      => 'mrc.jks',
         trusted_format   => $trusted_format,
         trusted_password => $mrc_jks_password,
       }
@@ -398,7 +401,7 @@ class fogstore(
         object_dir       => $object_dir,
         properties       => $properties,
         ssl_source_dir   => $ssl_source_dir,
-        trusted          => $trusted,
+        trust_store      => $trust_store,
         trusted_format   => $trusted_format,
         trusted_password => $osd_jks_password,
       }

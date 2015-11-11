@@ -20,7 +20,7 @@ describe 'fogstore::roles::dir' do
           osd_ca           => 'osd-ca.pem',
           properties       => {},
           ssl_source_dir   => 'file://.',
-          trusted          => 'dir.jks',
+          trust_store      => 'dir.jks',
           trusted_password => 'dir-jks-password',
         }
         "
@@ -43,7 +43,7 @@ describe 'fogstore::roles::dir' do
           osd_ca           => 'osd-ca.pem',
           properties       => {},
           ssl_source_dir   => 'file://.',
-          trusted          => 'dir.jks',
+          trust_store      => 'dir.jks',
           trusted_password => 'dir-jks-password',
         }
         "
@@ -66,7 +66,7 @@ describe 'fogstore::roles::dir' do
           osd_ca           => 'osd-ca.pem',
           properties       => {},
           ssl_source_dir   => 'file://.',
-          trusted          => 'dir.jks',
+          trust_store      => 'dir.jks',
           trusted_password => 'dir-jks-password',
         }
         "
@@ -89,7 +89,7 @@ describe 'fogstore::roles::dir' do
           osd_ca           => 'osd-ca.pem',
           properties       => {},
           ssl_source_dir   => 'file://.',
-          trusted          => 'dir.jks',
+          trust_store      => 'dir.jks',
           trusted_password => 'dir-jks-password',
         }
         "
@@ -111,7 +111,7 @@ describe 'fogstore::roles::dir' do
           osd_ca           => 'osd-ca.pem',
           properties       => {},
           ssl_source_dir   => 'file://.',
-          trusted          => 'dir.jks',
+          trust_store      => 'dir.jks',
           trusted_password => 'dir-jks-password',
         }"
       end
@@ -159,7 +159,7 @@ describe 'fogstore::roles::dir' do
             'listen.address' => '127.0.0.1',
           },
           ssl_source_dir   => 'file://.',
-          trusted          => 'dir.jks',
+          trust_store      => 'dir.jks',
           trusted_password => 'dir-jks-password',
         }"
       end

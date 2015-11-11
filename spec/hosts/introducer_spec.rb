@@ -143,7 +143,7 @@ describe 'introducer' do
         .with('cred_password'    => 'dir-credential-password')
         .with('credential'       => 'dir.p12')
         .with('ssl_source_dir'   => 'file://.')
-        .with('trusted'          => 'dir.jks')
+        .with('trust_store'      => 'dir.jks')
         .with('trusted_format'   => 'jks')
         .with('trusted_password' => 'dir-jks')
     }
@@ -155,7 +155,7 @@ describe 'introducer' do
         .with('cred_password'    => 'mrc-credential-password')
         .with('credential'       => 'mrc.p12')
         .with('ssl_source_dir'   => 'file://.')
-        .with('trusted'          => 'mrc.jks')
+        .with('trust_store'      => 'mrc.jks')
         .with('trusted_format'   => 'jks')
         .with('trusted_password' => 'mrc-jks')
     }

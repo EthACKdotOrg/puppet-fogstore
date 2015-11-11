@@ -18,7 +18,7 @@ describe 'fogstore::roles::mrc' do
           credential       => 'mrc.p12',
           dir_ca           => 'dir-ca.pem',
           ssl_source_dir   => 'file://.',
-          trusted          => 'mrc.jks',
+          trust_store      => 'mrc.jks',
           trusted_password => 'mrc-jks-password',
         }
         "
@@ -39,7 +39,7 @@ describe 'fogstore::roles::mrc' do
           credential       => 'mrc.p12',
           dir_ca           => 'dir-ca.pem',
           ssl_source_dir   => 'file://.',
-          trusted          => 'mrc.jks',
+          trust_store      => 'mrc.jks',
           trusted_password => 'mrc-jks-password',
         }
         "
@@ -60,7 +60,7 @@ describe 'fogstore::roles::mrc' do
           credential       => 'mrc.p12',
           dir_ca           => 'dir-ca.pem',
           ssl_source_dir   => 'file://.',
-          trusted          => 'mrc.jks',
+          trust_store      => 'mrc.jks',
           trusted_password => 'mrc-jks-password',
         }
         "
@@ -81,7 +81,7 @@ describe 'fogstore::roles::mrc' do
           credential       => 'mrc.p12',
           dir_ca           => 'dir-ca.pem',
           ssl_source_dir   => 'file://.',
-          trusted          => 'mrc.jks',
+          trust_store      => 'mrc.jks',
           trusted_password => 'mrc-jks-password',
         }
         "
@@ -102,7 +102,7 @@ describe 'fogstore::roles::mrc' do
           credential       => 'mrc.p12',
           dir_ca           => 'dir-ca.pem',
           ssl_source_dir   => 'file://.',
-          trusted          => 'mrc.jks',
+          trust_store      => 'mrc.jks',
           trusted_password => 'mrc-jks-password',
         }
         "

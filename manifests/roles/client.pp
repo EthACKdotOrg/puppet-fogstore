@@ -20,16 +20,44 @@ class fogstore::roles::client (
   include ::fogstore::params
   include ::fogstore::user
 
+  $min = $fogstore::params::min_pwd_length
+  $max = $fogstore::params::max_pwd_length
+
   validate_string($admin_password)
-  validate_slength($admin_password, 64, 12)
+  validate_string($dir_protocol)
+  validate_string($credential)
+  validate_string($cred_key)
+  validate_string($cred_password)
+
   validate_bool($add_repo)
   validate_bool($manage_ssl)
+
+  validate_slength($admin_password, $max, $min)
+  validate_slength($cred_password, $max, $min)
+
+  if !is_integer($dir_port) {
+    fail "${dir_port} doesn't look like an integer"
+  }
+
+  if !is_domain_name($dir_host) {
+    fail "${dir_host} doesn't look like a valide name"
+  }
 
   if !is_hash($volumes) {
     fail 'Volumes need to ba a hash'
   }
   if !is_hash($mounts) {
     fail 'Mounts need to ba a hash'
+  }
+
+  if $credential == '' {
+    fail 'Credential seems to be an empty string'
+  }
+  if $cred_key == '' {
+    fail 'Cred_key seems to be an empty string'
+  }
+  if $cred_password == '' {
+    fail 'Cred_password seems to be an empty string'
   }
 
   if $manage_ssl {
@@ -62,7 +90,7 @@ class fogstore::roles::client (
 
   $defaults = {
     dir_host              => $dir_host,
-    dir_port              => $dir_port,
+    #dir_port              => $dir_port,
     dir_protocol          => $dir_protocol,
     options               => {
       'admin_password'    => $admin_password,

@@ -29,7 +29,7 @@ class fogstore::params (
   $pkg_source       = '',
   $ssl_source_dir   = '',
   $trusted_format   = 'jks',
-  $trusted          = 'trusted.jks',
+  $trust_store      = 'trusted.jks',
   $volumes          = {},
 ) {
 

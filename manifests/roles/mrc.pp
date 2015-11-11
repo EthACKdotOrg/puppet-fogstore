@@ -19,7 +19,7 @@ class fogstore::roles::mrc(
   $manage_jks       = $fogstore::params::manage_ssl,
   $properties       = $fogstore::params::properties,
   $ssl_source_dir   = $fogstore::params::ssl_source_dir,
-  $trusted          = $fogstore::params::trusted,
+  $trust_store      = $fogstore::params::trust_store,
   $trusted_format   = $fogstore::params::trusted_format,
   $trusted_password = $fogstore::params::dir_jks_password,
 ) inherits fogstore::params {
@@ -42,7 +42,7 @@ class fogstore::roles::mrc(
     'ssl.service_creds.pw' =>
       $cred_password,
     'ssl.trusted_certs' =>
-      "${fogstore::params::trust_location}/${trusted}",
+      "${fogstore::params::trust_location}/${trust_store}",
     'ssl.trusted_certs.container' =>
       $trusted_format,
     'ssl.trusted_certs.pw' =>
@@ -64,7 +64,7 @@ class fogstore::roles::mrc(
   class {'::xtreemfs::role::metadata':
     add_repo     => $add_repo,
     dir_host     => $dir_host,
-    dir_port     => $dir_port,
+    #dir_port     => $dir_port,
     dir_protocol => $dir_protocol,
     properties   => merge($local_properties, $properties),
   }

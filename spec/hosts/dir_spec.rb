@@ -104,7 +104,7 @@ describe 'dir' do
         .with('cred_password'    => 'credential-password')
         .with('credential'       => 'credential.pem')
         .with('ssl_source_dir'   => 'file://.')
-        .with('trusted'          => 'dir.jks')
+        .with('trust_store'      => 'dir.jks')
         .with('trusted_format'   => 'jks')
         .with('trusted_password' => 'dir-jks')
     }

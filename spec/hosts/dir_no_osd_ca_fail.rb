@@ -7,7 +7,7 @@ describe 'dir.no-osd-ca.fail' do
     end
 
     it 'should fail' do
-      should raise_error(Puppet::Error, /Needs client, mrc and osd CAs for dir/)
+      should raise_error(Puppet::Error, /Need dir_ca, mrc_ca and osd_ca/)
     end
   end
 end
