@@ -2,7 +2,7 @@
   "name": "puppet-fogstore",
   "version": "0.1.0",
   "author": "EthACK",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "source": "https://github.com/ethackdotorg/puppet-fogstore.git",
   "project_page": "https://fogstore.org/",
   "issues_url": "https://github.com/ethackdotorg/puppet-fogstore/issues",
