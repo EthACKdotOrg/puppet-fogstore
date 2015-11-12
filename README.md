@@ -4,7 +4,7 @@ Community decentralized storage at hand.
 ## Build status
 ### Dev branch
 [![Build Status](https://travis-ci.org/EthACKdotOrg/puppet-fogstore.svg?branch=dev)](https://travis-ci.org/EthACKdotOrg/puppet-fogstore)
-[![Coverage Status](https://img.shields.io/coveralls/EthACKdotOrg/puppet-fogstore/dev.svg)](https://coveralls.io/r/EthACKdotOrg/puppet-fogstore?branch=dev)
+[![Coverage Status](https://coveralls.io/repos/EthACKdotOrg/puppet-fogstore/badge.svg?branch=dev&service=github)](https://coveralls.io/github/EthACKdotOrg/puppet-fogstore?branch=dev)
 
 ## Security, decentralization, open source
 Fogstore wants to provide an easy way to deploy xtreemfs filesystem,
