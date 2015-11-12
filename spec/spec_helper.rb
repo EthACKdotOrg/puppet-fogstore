@@ -1,9 +1,14 @@
 require 'puppetlabs_spec_helper/module_spec_helper'
-require 'coveralls'
 
 require 'rspec-puppet-facts'
 include RspecPuppetFacts
 
+require 'simplecov'
+SimpleCov.start do
+  add_filter 'spec/fixtures/modules/'
+end
+
+require 'coveralls'
 Coveralls.wear!
 
 RSpec.configure do |c|
